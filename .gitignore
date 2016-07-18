@@ -1,0 +1,12 @@
+.idea/
+.pycharmrc
+frontend/__pycache__/
+data_dump/Posts.csv
+data_dump/
+db.sqlite3
+__pycache__/
+venv_kurc_django/
+kurc/top_secrets.py
+kurc.Rproj
+frontend/secrets/client_secret.json
+frontend/fixtures/docs_full.json

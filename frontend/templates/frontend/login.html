@@ -1,0 +1,24 @@
+{% extends 'frontend/base.html' %}
+
+<!-- this is python/django -->
+{% load staticfiles %}
+<!-- this is python/django -->
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="jumbotron">
+      <h1><img src="{% static 'frontend/images/logo.png' %}" alt="logo" width="180" class="img-responsive visible-lg-inline"> <strong>Dobrodošli!</strong></h1>
+      <p>Dev no kazahzem studentis, bu varit tancit slabju den, on dev usta znajm sxuflad. Tot na klas scxastju, ostatit robenie vi hce? Tolk zxenis gda on, mai perv bratis cxetvert li? Nams pomocit mi sam, vo nad ekonomju razumijut belaruszem! Gda dirkas politia razumju es, bil futbol minutis bo, tut sport slisxil problem to! </p>
+      <p style="font-style:italic;"> Suhju hceme miakju ti vse. Es slozxju despiat angloju oni, vi gaz slovis varijm ludvozis. Moi to tolk tancit gotovijut? Ona zxiznuf pomocijsx ti, trasil polozxij bo sam, na dom sxto cxehzem. Es tot delajt voprosil! </p>
+      <div class="row"> &nbsp; </div>
+      <div class="row">
+        <div class="col-lg-4 col-lg-offset-4 col-md-12">
+          <button type="button" class="btn btn-lg btn-primary btn-block center-block" onClick="window.location.href='{% url 'social:begin' 'google-oauth2' %}?next=/docs'">
+            <span style="font-size:30px;"> Sign in with Google</span> </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
