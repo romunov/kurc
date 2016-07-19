@@ -1,8 +1,12 @@
-Ko koniraš projekt, je treba:
+Before you start coding, you will have to:
 
-* izmisli si svoj SECRET_KEY (settings.py)
-* kreirat bazo
-* naredit superuserja
-* naredit po možnosti še nesuperuserja?
-* v bazo [uvozit frontend/fixtures](https://docs.djangoproject.com/en/1.8/howto/initial-data/) (`python manage.py loaddata <ime fixtureja>)
-* naredi google app in v top_secrets.py dodaj vse spremenljivke, ki jih rabiš v settings.py (SECRET_KEY, SOCIAL_AUTH_GOOGLE_OAUTH2_KEY, SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET, SCOPES, CLIENT_SECRET_FILE, APPLICATION_NAME)
+* create `top_secrets.py` (or some other name, to which you link from `settings.py` and populate it with:
+    * SECRET_KEY
+    * SOCIAL_AUTH_GOOGLE_OAUTH2_KEY  (needed for Google login, needs [credentials from Google API](https://console.developers.google.com/apis/credentials))
+    * SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET  (needed for Google login, needs [credentials from Google API](https://console.developers.google.com/apis/credentials))
+    * SCOPES
+    * CLIENT_SECRET_FILE
+    * APPLICATION_NAME
+* run migrations and link to the database
+* creat superuser (`python manage.py createsuperuser`) and possibly other users for testing purposes
+* import [frontend/fixtures](https://docs.djangoproject.com/en/1.8/howto/initial-data/) (`python manage.py loaddata <fixtures name>`)
