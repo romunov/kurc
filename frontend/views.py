@@ -147,20 +147,20 @@ dokument številka %s. Dokument želim prejeti na zgoraj naveden elektronski nas
               <head></head>
               <body>
                 <p>
-                %s %s
-                %s
-                %s %s
-
-                Ministrstvo za notranje zadeve
-                Inšpektorat RS za notranje zadeve
-                Štefanova 11
-                1000 Ljubljana
-                mnz@gov.si
-
+                %s %s<br>
+                %s<br>
+                %s %s<br>
+                <br>
+                Ministrstvo za notranje zadeve<br>
+                Inšpektorat RS za notranje zadeve<br>
+                Štefanova 11<br>
+                1000 Ljubljana<br>
+                mnz@gov.si<br>
+                <br>
                 Želim, da mi skladno z Zakono o dostop do informacij javnega značaja (Uradni list RS, št. 51/06-
                 uradno prečiščeno besedilo, 117/06 – ZDavP-2, 23/14, 50/14, 19/15 – odl. US in 102/15) posredujete
-                dokument številka %s. Dokument želim prejeti na zgoraj naveden elektronski naslov.
-
+                dokument številka %s. Dokument želim prejeti na zgoraj naveden elektronski naslov.<br>
+                <br>
                 %s %s
                 </p>
               </body>
@@ -169,13 +169,13 @@ dokument številka %s. Dokument želim prejeti na zgoraj naveden elektronski nas
                    u_address.post_name, clicked_doc, my_userid.first_name, my_userid.last_name)
 
             part1 = MIMEText(text, 'plain')
-            #part2 = MIMEText(html, 'html')  # začasno izklopljeno, ker ne dela ok
+            part2 = MIMEText(html, 'html')  # začasno izklopljeno, ker ne dela ok
 
             # Attach parts into message container.
             # According to RFC 2046, the last part of a multipart message, in this case
             # the HTML message, is best and preferred.
+            msg.attach(part2)
             msg.attach(part1)
-            #msg.attach(part2)
 
             raw = urlsafe_b64encode(msg.as_bytes())
             raw = raw.decode()
