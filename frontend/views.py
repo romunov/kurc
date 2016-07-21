@@ -128,10 +128,10 @@ def docs(request):
 %s
 %s %s
 
-Ministrstvo za notranje zadeve
 Inšpektorat RS za notranje zadeve
-Štefanova 11
-1000 Ljubljana
+Ministrstvo za notranje zadeve
+Štefanova ulica 2
+1501 Ljubljana
 mnz@gov.si
 
 Želim, da mi skladno z Zakono o dostop do informacij javnega značaja (Uradni list RS, št. 51/06-
