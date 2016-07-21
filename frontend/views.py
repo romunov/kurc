@@ -169,11 +169,11 @@ dokument številka %s. Dokument želim prejeti na zgoraj naveden elektronski nas
                    u_address.post_name, clicked_doc, my_userid.first_name, my_userid.last_name)
 
             part1 = MIMEText(text, 'plain')
-            part2 = MIMEText(html, 'html')  # začasno izklopljeno, ker ne dela ok
+            part2 = MIMEText(html, 'html')
 
             # Attach parts into message container.
             # According to RFC 2046, the last part of a multipart message, in this case
-            # the HTML message, is best and preferred.
+            # the HTML message, is best and preferred. But HTML is prettier and 2016, FFS.
             msg.attach(part2)
             msg.attach(part1)
 
@@ -199,12 +199,5 @@ dokument številka %s. Dokument želim prejeti na zgoraj naveden elektronski nas
                   {'doc_list': a_docs, 'user_docs': u_docs, 'sending_error': sending_error})
 
     # return HttpResponseRedirect(request, 'frontend/dokumenti.html')
-
-
-    # send e-mail
-    # https://developers.google.com/gmail/api/guides/sending see quickstart on how to set up service
-
-    # interact with user data
-    # https://docs.djangoproject.com/en/dev/topics/auth/default/#user-objects
     # TODO: ko je uporabnik logiran, naj bo / nekaj drugega kot /login. v bistvu je lahko / -> /docs, dokumenti pa niti ne gnucam
     # TODO: razmisli kako bi uporabniku povedal, da je bil mail uspešno poslan
