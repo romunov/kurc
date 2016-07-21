@@ -109,35 +109,34 @@ def docs(request):
         # Update Activity table, insert record of a requested document.
         my_docid = Docs.objects.get(docname=clicked_doc)
         my_userid = User.objects.get(pk=request.user.id)
-        my_sentto = Recipients.objects.get(id=2)  # currently recipient hard-coded to roman.lustrik@biolitika.si
+        my_sentto = Recipients.objects.get(id=1)  # currently recipient hard-coded to roman.lustrik@biolitika.si
 
         try:
             creds = get_credentials()
             http = creds.authorize(Http())
             service = discovery.build('gmail', 'v1', http=http)
 
-            # message = MIMEText('User requested ' + clicked_doc)
             # TODO: nadaljuj z buildanjem stringa, da pogruntaš kje crkne
 
-            message = MIMEText("a tole pa dela?" + clicked_doc)
-                # my_userid.first_name + request.user.last_name +
-                               # '\n' + u_address.street + '\n' + u_address.post_number + ' ' + u_address.post_name
-                               # '\n\n\n'
-                               # 'Zahtevek za pridobitev informacije javnega značaja (dokument št. ' + clicked_doc + ')'
-                               # '\n\n\n'
-                               # 'Spodaj podpisani želim, da mi skladno z Zakonom o dostopu do informacij javnega značaja'
-                               # ' \n (Uradni list RS, št. 51/06 – uradno prečiščeno besedilo, 117/06 – ZDavP-2, 23/14, '
-                               # '50/14, 19/15 – odl. US in 102/15) posredujete dokument št. ' + clicked_doc + '. Dokument'
-                               # ' želim prejeti na zgoraj naveden elektronski naslov.'
-                               # '\n \n ' + my_userid.first_name + my_userid.last_name
-                               # )
-            message['to'] = my_sentto.email
-            message['from'] = request.user.email
-            message['subject'] = 'Zahtevek za pridobitev informacije javnega značaja (dokument št. ' + clicked_doc + ')'
-            raw = urlsafe_b64encode(message.as_bytes())
-            raw = raw.decode()
-            msg = {'raw': raw}
-            service.users().messages().send(userId='me', body=msg).execute()
+            # message = MIMEText("a tole pa dela?" + clicked_doc)
+            #     # my_userid.first_name + request.user.last_name +
+            #                    # '\n' + u_address.street + '\n' + u_address.post_number + ' ' + u_address.post_name
+            #                    # '\n\n\n'
+            #                    # 'Zahtevek za pridobitev informacije javnega značaja (dokument št. ' + clicked_doc + ')'
+            #                    # '\n\n\n'
+            #                    # 'Spodaj podpisani želim, da mi skladno z Zakonom o dostopu do informacij javnega značaja'
+            #                    # ' \n (Uradni list RS, št. 51/06 – uradno prečiščeno besedilo, 117/06 – ZDavP-2, 23/14, '
+            #                    # '50/14, 19/15 – odl. US in 102/15) posredujete dokument št. ' + clicked_doc + '. Dokument'
+            #                    # ' želim prejeti na zgoraj naveden elektronski naslov.'
+            #                    # '\n \n ' + my_userid.first_name + my_userid.last_name
+            #                    # )
+            # message['to'] = my_sentto.email
+            # message['from'] = request.user.email
+            # message['subject'] = 'Zahtevek za pridobitev informacije javnega značaja (dokument št. ' + clicked_doc + ')'
+            # raw = urlsafe_b64encode(message.as_bytes())
+            # raw = raw.decode()
+            # msg = {'raw': raw}
+            # service.users().messages().send(userId='me', body=msg).execute()
 
             # Update Docs table, add count + 1.
             Docs.objects.filter(docname=clicked_doc).update(doccount=F('doccount') + 1)
