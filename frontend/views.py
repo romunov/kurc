@@ -7,10 +7,11 @@ from .models import UserAddress, Docs, Activity, Recipients
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
-from django.http import HttpResponseRedirect
+# from django.http import HttpResponseRedirect
 from .misc_functions import get_credentials
 from httplib2 import Http
 from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from base64 import urlsafe_b64encode
 from apiclient import discovery
 from urllib.error import HTTPError
@@ -116,27 +117,71 @@ def docs(request):
             http = creds.authorize(Http())
             service = discovery.build('gmail', 'v1', http=http)
 
-            # TODO: nadaljuj z buildanjem stringa, da pogruntaš kje crkne
+            # Create message container - the correct MIME type is multipart/alternative.
+            # https://docs.python.org/2.7/library/email-examples.html?highlight=mimemultipart
+            msg = MIMEMultipart()
+            msg['Subject'] = "Zahteva za dostop do informacije javnega značaja št. %s" % clicked_doc
+            msg['From'] = '%s %s <%s>' % (my_userid.first_name, my_userid.last_name, request.user.email)
+            msg['To'] = my_sentto.email
 
-            # message = MIMEText("a tole pa dela?" + clicked_doc)
-            #     # my_userid.first_name + request.user.last_name +
-            #                    # '\n' + u_address.street + '\n' + u_address.post_number + ' ' + u_address.post_name
-            #                    # '\n\n\n'
-            #                    # 'Zahtevek za pridobitev informacije javnega značaja (dokument št. ' + clicked_doc + ')'
-            #                    # '\n\n\n'
-            #                    # 'Spodaj podpisani želim, da mi skladno z Zakonom o dostopu do informacij javnega značaja'
-            #                    # ' \n (Uradni list RS, št. 51/06 – uradno prečiščeno besedilo, 117/06 – ZDavP-2, 23/14, '
-            #                    # '50/14, 19/15 – odl. US in 102/15) posredujete dokument št. ' + clicked_doc + '. Dokument'
-            #                    # ' želim prejeti na zgoraj naveden elektronski naslov.'
-            #                    # '\n \n ' + my_userid.first_name + my_userid.last_name
-            #                    # )
-            # message['to'] = my_sentto.email
-            # message['from'] = request.user.email
-            # message['subject'] = 'Zahtevek za pridobitev informacije javnega značaja (dokument št. ' + clicked_doc + ')'
-            # raw = urlsafe_b64encode(message.as_bytes())
-            # raw = raw.decode()
-            # msg = {'raw': raw}
-            # service.users().messages().send(userId='me', body=msg).execute()
+            text = """%s %s
+%s
+%s %s
+
+Ministrstvo za notranje zadeve
+Inšpektorat RS za notranje zadeve
+Štefanova 11
+1000 Ljubljana
+mnz@gov.si
+
+Želim, da mi skladno z Zakono o dostop do informacij javnega značaja (Uradni list RS, št. 51/06-
+uradno prečiščeno besedilo, 117/06 – ZDavP-2, 23/14, 50/14, 19/15 – odl. US in 102/15) posredujete
+dokument številka %s. Dokument želim prejeti na zgoraj naveden elektronski naslov.
+
+%s %s
+            """ % (my_userid.first_name, my_userid.last_name, u_address.street, u_address.post_number,
+                   u_address.post_name, clicked_doc, my_userid.first_name, my_userid.last_name)
+
+            html = """\
+            <html>
+              <head></head>
+              <body>
+                <p>
+                %s %s
+                %s
+                %s %s
+
+                Ministrstvo za notranje zadeve
+                Inšpektorat RS za notranje zadeve
+                Štefanova 11
+                1000 Ljubljana
+                mnz@gov.si
+
+                Želim, da mi skladno z Zakono o dostop do informacij javnega značaja (Uradni list RS, št. 51/06-
+                uradno prečiščeno besedilo, 117/06 – ZDavP-2, 23/14, 50/14, 19/15 – odl. US in 102/15) posredujete
+                dokument številka %s. Dokument želim prejeti na zgoraj naveden elektronski naslov.
+
+                %s %s
+                </p>
+              </body>
+            </html>
+            """ % (my_userid.first_name, my_userid.last_name, u_address.street, u_address.post_number,
+                   u_address.post_name, clicked_doc, my_userid.first_name, my_userid.last_name)
+
+            part1 = MIMEText(text, 'plain')
+            #part2 = MIMEText(html, 'html')  # začasno izklopljeno, ker ne dela ok
+
+            # Attach parts into message container.
+            # According to RFC 2046, the last part of a multipart message, in this case
+            # the HTML message, is best and preferred.
+            msg.attach(part1)
+            #msg.attach(part2)
+
+            raw = urlsafe_b64encode(msg.as_bytes())
+            raw = raw.decode()
+            msg = {'raw': raw}
+
+            service.users().messages().send(userId='me', body=msg).execute()
 
             # Update Docs table, add count + 1.
             Docs.objects.filter(docname=clicked_doc).update(doccount=F('doccount') + 1)
@@ -162,4 +207,4 @@ def docs(request):
     # interact with user data
     # https://docs.djangoproject.com/en/dev/topics/auth/default/#user-objects
     # TODO: ko je uporabnik logiran, naj bo / nekaj drugega kot /login. v bistvu je lahko / -> /docs, dokumenti pa niti ne gnucam
-    # TODO: kako poslat mail? dat nek formular al popup?
+    # TODO: razmisli kako bi uporabniku povedal, da je bil mail uspešno poslan
