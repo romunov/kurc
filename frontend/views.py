@@ -154,7 +154,7 @@ dokument številka %s. Dokument želim prejeti na zgoraj naveden elektronski nas
 
 <body style="margin: 0; padding: 0;">
 
-    <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse; font-family: sans-serif; font-size: 11pt;">
+    <table align="left" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse; font-family: sans-serif; font-size: 11pt;">
         <tr>
             <td align="left" style="padding: 20px 5px 10px 5px;">
                 %s %s
