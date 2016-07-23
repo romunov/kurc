@@ -33,3 +33,86 @@ def get_credentials():
         credentials = tools.run(flow, store)
     return credentials
 
+
+"""
+Given data, produce a html string which can be passed to MIMEMultiPart or MIMEType
+"""
+
+
+def create_html_string(first_name, last_name, street, post_number, post_name, doc_name, output):
+    html = """
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml">
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Zahteva za dostop do informacije javnega značaja</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    </head>
+
+    <body style="margin: 0; padding: 0;">
+
+        <table align="left" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse; font-family: sans-serif; font-size: 11pt;">
+            <tr>
+                <td align="left" style="padding: 20px 5px 10px 5px;">
+                    %s %s
+                    <br> %s
+                    <br> %s %s
+                </td>
+            </tr>
+            <tr>
+                <td align="left" style="padding: 20px 5px 10px 5px;">
+                    Ministrstvo za notranje zadeve
+                    <br> Inšpektorat RS za notranje zadeve
+                    <br> Štefanova 11
+                    <br> 1000 Ljubljana
+                    <br> mnz@gov.si
+                </td>
+            </tr>
+            <tr>
+                <td align="left" style="padding: 10px 5px 10px 5px;">
+                    <strong>ZADEVA: Zahteva za dostop do informacije javnega značaja št. %s</strong>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" style="padding: 10px 5px 10px 5px;">
+                    Želim, da mi skladno z Zakono o dostop do informacij javnega značaja (Uradni list RS, št. 51/06- uradno prečiščeno besedilo, 117/06 – ZDavP-2, 23/14, 50/14, 19/15 – odl. US in 102/15) posredujete dokument številka %s. Dokument želim prejeti na zgoraj naveden elektronski naslov.
+                </td>
+            </tr>
+            <tr>
+                <td align="left" style="padding: 20px 5px 10px 5px;">
+                    %s %s
+                </td>
+            </tr>
+        </table>
+    </body>
+
+    </html>
+                """ % (first_name, last_name, street, post_number,
+                       post_name, doc_name, doc_name, first_name, last_name)
+
+    text = """%s %s
+%s
+%s %s
+
+Inšpektorat RS za notranje zadeve
+Ministrstvo za notranje zadeve
+Štefanova ulica 2
+1501 Ljubljana
+mnz@gov.si
+
+ZADEVA: Zahteva za dostop do informacije javnega značaja št. %s
+
+Želim, da mi skladno z Zakono o dostop do informacij javnega značaja (Uradni list RS, št. 51/06 - uradno prečiščeno
+besedilo, 117/06 – ZDavP-2, 23/14, 50/14, 19/15 – odl. US in 102/15) posredujete dokument številka %s. Dokument želim
+prejeti na zgoraj naveden elektronski naslov.
+
+
+%s %s
+            """ % (first_name, last_name, street, post_number, post_name,
+                   doc_name, doc_name, first_name, last_name)
+
+    if output == "text":
+        return text
+    if output == "html":
+        return html

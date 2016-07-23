@@ -15,6 +15,7 @@ from email.mime.multipart import MIMEMultipart
 from base64 import urlsafe_b64encode
 from apiclient import discovery
 from urllib.error import HTTPError
+from .misc_functions import create_html_string
 
 
 def index(request):
@@ -124,74 +125,12 @@ def docs(request):
             msg['From'] = '%s %s <%s>' % (my_userid.first_name, my_userid.last_name, request.user.email)
             msg['To'] = my_sentto.email
 
-            text = """%s %s
-%s
-%s %s
-
-Inšpektorat RS za notranje zadeve
-Ministrstvo za notranje zadeve
-Štefanova ulica 2
-1501 Ljubljana
-mnz@gov.si
-
-Želim, da mi skladno z Zakono o dostop do informacij javnega značaja (Uradni list RS, št. 51/06-
-uradno prečiščeno besedilo, 117/06 – ZDavP-2, 23/14, 50/14, 19/15 – odl. US in 102/15) posredujete
-dokument številka %s. Dokument želim prejeti na zgoraj naveden elektronski naslov.
-
-%s %s
-            """ % (my_userid.first_name, my_userid.last_name, u_address.street, u_address.post_number,
-                   u_address.post_name, clicked_doc, my_userid.first_name, my_userid.last_name)
-
-            html = """
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Zahteva za dostop do informacije javnega značaja</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-</head>
-
-<body style="margin: 0; padding: 0;">
-
-    <table align="left" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse; font-family: sans-serif; font-size: 11pt;">
-        <tr>
-            <td align="left" style="padding: 20px 5px 10px 5px;">
-                %s %s
-                <br> %s
-                <br> %s %s
-            </td>
-        </tr>
-        <tr>
-            <td align="left" style="padding: 20px 5px 10px 5px;">
-                Ministrstvo za notranje zadeve
-                <br> Inšpektorat RS za notranje zadeve
-                <br> Štefanova 11
-                <br> 1000 Ljubljana
-                <br> mnz@gov.si
-            </td>
-        </tr>
-        <tr>
-            <td align="left" style="padding: 10px 5px 10px 5px;">
-                <strong>ZADEVA: Zahteva za dostop do informacije javnega značaja št. %s</strong>
-            </td>
-        </tr>
-        <tr>
-            <td align="left" style="padding: 10px 5px 10px 5px;">
-                Želim, da mi skladno z Zakono o dostop do informacij javnega značaja (Uradni list RS, št. 51/06- uradno prečiščeno besedilo, 117/06 – ZDavP-2, 23/14, 50/14, 19/15 – odl. US in 102/15) posredujete dokument številka %s. Dokument želim prejeti na zgoraj naveden elektronski naslov.
-            </td>
-        </tr>
-        <tr>
-            <td align="left" style="padding: 20px 5px 10px 5px;">
-                %s %s
-            </td>
-        </tr>
-    </table>
-</body>
-
-</html>
-            """ % (my_userid.first_name, my_userid.last_name, u_address.street, u_address.post_number,
-                   u_address.post_name, clicked_doc, clicked_doc, my_userid.first_name, my_userid.last_name)
+            html = create_html_string(first_name=my_userid.first_name, last_name=my_userid.last_name,
+                                      street=u_address.street, post_number=u_address.post_number,
+                                      post_name=u_address.post_name, doc_name=clicked_doc, output="html")
+            text = create_html_string(first_name=my_userid.first_name, last_name=my_userid.last_name,
+                                      street=u_address.street, post_number=u_address.post_number,
+                                      post_name=u_address.post_name, doc_name=clicked_doc, output="text")
 
             part1 = MIMEText(text, 'plain')
             part2 = MIMEText(html, 'html')
