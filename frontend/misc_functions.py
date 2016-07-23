@@ -39,7 +39,7 @@ Given data, produce a html string which can be passed to MIMEMultiPart or MIMETy
 """
 
 
-def create_html_string(first_name, last_name, street, post_number, post_name, doc_name, output):
+def create_html_string(first_name, last_name, street, post_number, post_name, email, doc_name, output):
     html = """
     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
     <html xmlns="http://www.w3.org/1999/xhtml">
@@ -58,6 +58,7 @@ def create_html_string(first_name, last_name, street, post_number, post_name, do
                     %s %s
                     <br> %s
                     <br> %s %s
+                    <br> %s
                 </td>
             </tr>
             <tr>
@@ -88,12 +89,13 @@ def create_html_string(first_name, last_name, street, post_number, post_name, do
     </body>
 
     </html>
-                """ % (first_name, last_name, street, post_number,
-                       post_name, doc_name, doc_name, first_name, last_name)
+                """ % (first_name, last_name, street, post_number, post_name, email,
+                       doc_name, doc_name, first_name, last_name)
 
     text = """%s %s
 %s
 %s %s
+%s
 
 Inšpektorat RS za notranje zadeve
 Ministrstvo za notranje zadeve
@@ -109,7 +111,7 @@ prejeti na zgoraj naveden elektronski naslov.
 
 
 %s %s
-            """ % (first_name, last_name, street, post_number, post_name,
+            """ % (first_name, last_name, street, post_number, post_name, email,
                    doc_name, doc_name, first_name, last_name)
 
     if output == "text":

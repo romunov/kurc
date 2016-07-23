@@ -127,12 +127,15 @@ def docs(request):
 
             html = create_html_string(first_name=my_userid.first_name, last_name=my_userid.last_name,
                                       street=u_address.street, post_number=u_address.post_number,
-                                      post_name=u_address.post_name, doc_name=clicked_doc, output="html")
+                                      post_name=u_address.post_name, email=my_userid.email, doc_name=clicked_doc,
+                                      output="html")
             text = create_html_string(first_name=my_userid.first_name, last_name=my_userid.last_name,
                                       street=u_address.street, post_number=u_address.post_number,
-                                      post_name=u_address.post_name, doc_name=clicked_doc, output="text")
+                                      post_name=u_address.post_name, email=my_userid.email, doc_name=clicked_doc,
+                                      output="text")
 
             part1 = MIMEText(text, 'plain')
+            part1.add_header('Content-Disposition', 'attachment', filename="zahteva_ijz_%s.txt" % clicked_doc)
             part2 = MIMEText(html, 'html')
 
             # Attach parts into message container.
