@@ -1,8 +1,5 @@
 {% extends 'frontend/base.html' %}
-
-<!-- this is python/django -->
 {% load staticfiles %}
-<!-- this is python/django -->
 
 {% block content %}
 <div class="container">
@@ -24,12 +21,11 @@
                         <tbody>
                         {% for doc in doc_list %}
                         {% if doc.doccount < 3 %}
-
                         <tr>
                             <td>{{ doc.docname }}</td>
                             <td>{{ doc.doccount }}</td>
                             <td>
-                                <button type="submit" class="btn btn-danger btn-sm btn-block" , name="clickedDocName"
+                                <button type="submit" class="btn btn-danger btn-sm btn-block", name="clickedDocName"
                                         value="{{ doc.docname }}" data-toggle="modal" data-target="#email_modal">
                                     <span class="glyphicon glyphicon-envelope"></span>
                                 </button>
@@ -61,10 +57,10 @@
                     </thead>
                     <form class="form-horizontal" method="post" action="/docs">{% csrf_token %}
                         <tbody>
-                        {% for doc in user_docs|slice:":10" %}
+                        {% for doc in user_docs %}
                         <tr>
                             <td>{{ doc.docid.docname }}</td>
-                            <td>{{doc.datumtime }}</td>
+                            <td>{{ doc.datumtime }}</td>
                         </tr>
                         {% endfor %}
                         </tbody>
@@ -74,8 +70,4 @@
         </div>
     </div>
 </div>
-
-{% block sendemail %}
-{% endblock %}
-
 {% endblock content %}
