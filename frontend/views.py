@@ -105,7 +105,7 @@ def docs(request):
     u_docs_vals = u_docs.values('docid')
 
     # ... and exclude them from Docs
-    a_docs = Docs.objects.exclude(id__in=u_docs_vals).order_by('-docname')[:10]
+    a_docs = Docs.objects.exclude(id__in=u_docs_vals).order_by('-docname')
     # TODO: dodaj paginacijo v tabelo za Doc in Activity
     # TODO: fino bi blo met še filtriranje, po možnosti z bootstrap tabelam
 
@@ -175,7 +175,3 @@ def docs(request):
 
     return render(request, 'frontend/dokumenti.html',
                   {'doc_list': a_docs, 'user_docs': u_docs, 'sending_error': sending_error})
-
-    # return HttpResponseRedirect(request, 'frontend/dokumenti.html')
-    # TODO: ko je uporabnik logiran, naj bo / nekaj drugega kot /login. v bistvu je lahko / -> /docs, dokumenti pa niti ne gnucam
-    # TODO: razmisli kako bi uporabniku povedal, da je bil mail uspešno poslan
