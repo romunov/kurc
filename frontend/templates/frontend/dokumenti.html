@@ -8,6 +8,11 @@
         <div class="col-lg-8 col-lg-offset-2">
             <h3><strong>Dokumenti, ki še nimajo treh zahtevkov</strong></h3>
             <hr>
+            {% if messages %}
+                {% for message in messages %}
+                <div {% if message.tags %} class="alert alert-{{ message.tags }}" {% endif %}>{{ message }}</div>
+                {% endfor %}
+            {% endif %}
             <div class="table-responsive">
                 <table id="tab_all_docs" class="table table-hover">
                     <thead>
@@ -25,7 +30,7 @@
                             <td>{{ doc.docname }}</td>
                             <td>{{ doc.doccount }}</td>
                             <td>
-                                <button type="submit" class="btn btn-danger btn-sm btn-block", name="clickedDocName"
+                                <button type="submit" class="btn btn-danger btn-sm btn-block" , name="clickedDocName"
                                         value="{{ doc.docname }}" data-toggle="modal" data-target="#email_modal">
                                     <span class="glyphicon glyphicon-envelope"></span>
                                 </button>
@@ -42,6 +47,7 @@
     {% if sending_error %}
     <p>{{ sending_error }}</p>
     {% endif %}
+
     <div class="row">
         <div class="col-lg-8 col-lg-offset-2">
             <h3><strong>Moji poslani zahtevki</strong></h3>

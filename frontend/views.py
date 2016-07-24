@@ -1,6 +1,6 @@
 from django.shortcuts import render, render_to_response
 from django.template.context import RequestContext
-from django.contrib import auth
+from django.contrib import auth, messages
 from django.db.models import F
 from .forms import UserAddressSettingsForm, BasicUserSettingsForm
 from .models import UserAddress, Docs, Activity, Recipients
@@ -164,6 +164,9 @@ def docs(request):
             my_act = Activity.objects.create(docid=my_docid, userid=my_userid, sentto=my_sentto,
                                              datumtime=timezone.now())
             my_act.save()
+
+            messages.success(request,
+                             "Zahtevek št. %s uspešno poslan. Organ ima 30 dni časa, da odgovori." % clicked_doc)
 
         except HTTPError as e:
             sending_error = 'Error: %s' % e
