@@ -23,7 +23,15 @@ def index(request):
                              {'request': request,
                               'user': request.user})
 
-    return render_to_response('frontend/login.html', context_instance=context)
+    if request.user.is_anonymous():
+        return render(request, 'frontend/login.html', context_instance=context)
+    else:
+        sending_error = None
+        u_docs = Activity.objects.filter(userid=request.user.id).order_by('-datumtime')
+        u_docs_vals = u_docs.values('docid')
+        a_docs = Docs.objects.exclude(id__in=u_docs_vals).order_by('-docname')[:10]
+        return render(request, 'frontend/dokumenti.html',
+                      {'doc_list': a_docs, 'user_docs': u_docs, 'sending_error': sending_error})
     # return render(request, 'frontend/login.html')
 
 
