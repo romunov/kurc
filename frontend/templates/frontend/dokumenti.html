@@ -63,16 +63,14 @@
                         <!-- TODO: dodaj link za upload dokumenta -->
                     </tr>
                     </thead>
-                    <form class="form-horizontal" method="post" action="/docs">{% csrf_token %}
-                        <tbody>
-                        {% for doc in user_docs %}
-                        <tr>
-                            <td>{{ doc.docid.docname }}</td>
-                            <td>{{ doc.datumtime }}</td>
-                        </tr>
-                        {% endfor %}
-                        </tbody>
-                    </form>
+                    <tbody>
+                    {% for doc in user_docs %}
+                    <tr>
+                        <td>{{ doc.docid.docname }}</td>
+                        <td>{{ doc.datumtime }}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
                 </table>
             </div>
         </div>
