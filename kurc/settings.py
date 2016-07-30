@@ -104,3 +104,13 @@ STATIC_URL = '/static/'
 
 LOGIN_URL = '/login'
 LOGIN_REDIRECT_URL = '/docs'
+
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_HTTPONLY = True
+X_FRAME_OPTIONS = "DENY"
+# https://docs.djangoproject.com/en/1.9/ref/middleware/#http-strict-transport-security
+SECURE_HSTS_SECONDS = 0  # set to ~3600 when on HTTPS

@@ -106,8 +106,6 @@ def docs(request):
 
     # ... and exclude them from Docs
     a_docs = Docs.objects.exclude(id__in=u_docs_vals).order_by('-docname')
-    # TODO: dodaj paginacijo v tabelo za Doc in Activity
-    # TODO: fino bi blo met še filtriranje, po možnosti z bootstrap tabelam
 
     if request.method == "POST":
         # Get user address
@@ -119,7 +117,7 @@ def docs(request):
         # Update Activity table, insert record of a requested document.
         my_docid = Docs.objects.get(docname=clicked_doc)
         my_userid = User.objects.get(pk=request.user.id)
-        my_sentto = Recipients.objects.get(id=1)  # currently recipient hard-coded to roman.lustrik@biolitika.si
+        my_sentto = Recipients.objects.get(id=1)
 
         try:
             creds = get_credentials()
