@@ -2,6 +2,8 @@
 {% load staticfiles %}
 
 {% block content %}
+
+{% if passto == None %}
 <div class="container">
     <!-- custom tabela iz pythona -->
     <div class="row">
@@ -76,5 +78,15 @@
         </div>
     </div>
 </div>
+{% else %}
+<div class="container">
+    <!-- custom tabela iz pythona -->
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2">
+            <h2>Naslov uporabnika <a href="/settings">v nastavitvah</a> še ni vnešen.</h2>
+        </div>
+    </div>
+</div>
+{% endif %}
 <!-- end testni DataTable -->
 {% endblock content %}

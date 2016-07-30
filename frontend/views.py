@@ -1,4 +1,4 @@
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render
 from django.template.context import RequestContext
 from django.contrib import auth, messages
 from django.db.models import F
@@ -7,7 +7,6 @@ from .models import UserAddress, Docs, Activity, Recipients
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
-# from django.http import HttpResponseRedirect
 from .misc_functions import get_credentials
 from httplib2 import Http
 from email.mime.text import MIMEText
@@ -26,6 +25,9 @@ def index(request):
     if request.user.is_anonymous():
         return render(request, 'frontend/login.html', context_instance=context)
     else:
+        if request.user.last_login is None:
+            render(request, 'frontend/nastavitve.html')
+
         sending_error = None
         u_docs = Activity.objects.filter(userid=request.user.id).order_by('-datumtime')
         u_docs_vals = u_docs.values('docid')
@@ -35,7 +37,15 @@ def index(request):
     # return render(request, 'frontend/login.html')
 
 
+def welcome(request):
+    return render(request, 'frontend/login.html')
+
+
 def settings(request):
+
+    if request.user.is_anonymous():
+        return render(request, 'frontend/404.html')
+
     # Prepare data to be filled into forms. User should always exist so no try/except call.
     prefill_user = User.objects.get(pk=request.user.id)
 
@@ -52,7 +62,7 @@ def settings(request):
                                                             'last_name': prefill_user.last_name,
                                                             'email': prefill_user.email},
                                                    instance=prefill_user)
-        # TODO: reference na pošto se bi verjetno lahko implementiralo tako, da bi za vnešeno poštno številko iz tabele glede na id poiskal še ime pošte
+
         settings_form_customuser = UserAddressSettingsForm(initial={'street': prefill_customuser.street,
                                                                     'post_name': prefill_customuser.post_name,
                                                                     'post_number': prefill_customuser.post_number},
@@ -81,7 +91,8 @@ def settings(request):
                    'settings_form_customuser': settings_form_customuser,
                    'write_ok': write_ok,
                    'data_user_acc': prefill_user,
-                   'data_user_add': prefill_customuser}
+                   'data_user_add': prefill_customuser,
+                   'passto': 3}
                   )
 
 
@@ -95,6 +106,22 @@ def login(request):
 
 
 def docs(request):
+
+    passto = None
+
+    # send away non-registered users
+    if request.user.is_anonymous():
+        return render(request, 'frontend/404.html')
+
+    # Invite first timers to add their information.
+    if request.user.last_login is None:
+        passto = 'First time logger.'
+
+    try:
+        sadd = UserAddress.objects.get(pk=request.user.id)
+    except UserAddress.DoesNotExist as de:
+        passto = 'No address (error %s).' % de
+
     # Initiate some objects and gather data.
     sending_error = None
 
@@ -172,4 +199,5 @@ def docs(request):
             sending_error = 'Error: %s' % te
 
     return render(request, 'frontend/dokumenti.html',
-                  {'doc_list': a_docs, 'user_docs': u_docs, 'sending_error': sending_error})
+                  {'doc_list': a_docs, 'user_docs': u_docs, 'sending_error': sending_error,
+                   'passto': passto})
