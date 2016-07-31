@@ -70,17 +70,22 @@ def settings(request):
         write_ok = None
 
     if request.method == "POST":
+        if request.POST.get('remove_personal_info'):
+            UserAddress.objects.filter(id=request.user.id).delete()
+
         settings_form_user = BasicUserSettingsForm(request.POST, instance=prefill_user)
         try:
             settings_form_customuser = UserAddressSettingsForm(request.POST, instance=prefill_customuser)
         except ObjectDoesNotExist:
             settings_form_customuser = UserAddressSettingsForm(request.POST)
 
-        # if settings_form_user.is_valid() and settings_form_customuser.is_valid():
         if settings_form_customuser.is_valid():
             settings_form_user.save()
             settings_form_customuser.save()
             write_ok = True
+            if request.POST.get('remove_personal_info'):
+                UserAddress.objects.get(id=request.user.id).delete()
+
         else:
             settings_form_user = BasicUserSettingsForm(request.POST)
             settings_form_customuser = UserAddressSettingsForm(request.POST)
