@@ -34,7 +34,7 @@ def index(request):
         a_docs = Docs.objects.exclude(id__in=u_docs_vals).order_by('-docname')[:10]
         return render(request, 'frontend/dokumenti.html',
                       {'doc_list': a_docs, 'user_docs': u_docs, 'sending_error': sending_error})
-    # return render(request, 'frontend/login.html')
+        # return render(request, 'frontend/login.html')
 
 
 def welcome(request):
@@ -204,6 +204,15 @@ def docs(request):
 
 
 def stats(request):
-    if request.user.is_superuser():
+    if request.user.is_superuser:
+        sending_error = None
 
-        return render(request, 'frontend/stats.html', context_instance={})
+        req_docs = Docs.objects.filter(doccount__gt=0)
+        active_docs = Activity.objects.all()
+
+        return render(request, 'frontend/stats.html',
+                      {'all_req_docs': req_docs,
+                       'activity_docs': active_docs,
+                       'sending_error': sending_error})
+    else:
+        return render(request, 'frontend/404.html')
