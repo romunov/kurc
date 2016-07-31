@@ -132,7 +132,7 @@ def docs(request):
     u_docs_vals = u_docs.values('docid')
 
     # ... and exclude them from Docs
-    a_docs = Docs.objects.exclude(id__in=u_docs_vals).order_by('-docname')[1:500]
+    a_docs = Docs.objects.exclude(id__in=u_docs_vals).order_by('-doccount')[1:500]
 
     if request.method == "POST":
         # Get user address
@@ -201,3 +201,9 @@ def docs(request):
     return render(request, 'frontend/dokumenti.html',
                   {'doc_list': a_docs, 'user_docs': u_docs, 'sending_error': sending_error,
                    'passto': passto})
+
+
+def stats(request):
+    if request.user.is_superuser():
+
+        return render(request, 'frontend/stats.html', context_instance={})
