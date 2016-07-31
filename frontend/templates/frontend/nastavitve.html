@@ -72,30 +72,23 @@
                         <button type="submit" class="btn btn-lg btn-primary center-block btn-block">Shranjeno
                             <span class="glyphicon glyphicon-ok" aria-hidden="true" aria-label="naprej"> </span>
                         </button>
-
-                        <button type="submit" class="btn btn-default btn-lg btn-primary center-block btn-block"
-                                data-toggle="popup" data-placement="right" name="remove_personal_info"
-                                title="Izbriši osebne podatke.">Izbriši podatke
-                        </button>
                         {% else %}
                         <button type="submit" class="btn btn-default btn-lg btn-primary center-block btn-block"
                                 data-toggle="popup" data-placement="right"
                                 title="Podatke si zapomni za pošiljanje elektronskih sporočil">Shrani podatke
-                        </button>
-
-                        <button type="submit" class="btn btn-default btn-lg btn-primary center-block btn-block"
-                                data-toggle="popup" data-placement="right" name="remove_personal_info"
-                                title="Izbriši osebne podatke.">Izbriši podatke
                         </button>
                         {% endif %}
                     </div>
                 </div>
             </form>
             <div class="row">
-                <p class="text-center" style="padding-top: 10px">
-                    Podatke se iz baze podatkov pobriše, če jih odstraniš iz zgornje forme in pritisneš gumb Shrani
-                    podatke.
-                </p>
+                <form class="form-horizontal" method="post" action="/settings">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-default btn-lg btn-primary center-block btn-block"
+                            data-toggle="popup" data-placement="right" name="remove_personal_info"
+                            title="Izbriši osebne podatke.">Izbriši podatke
+                    </button>
+                </form>
             </div>
         </div>
     </div>
