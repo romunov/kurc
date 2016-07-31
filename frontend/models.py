@@ -16,9 +16,9 @@ class PostNameNum(models.Model):
 
 class UserAddress(models.Model):
     id = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    street = models.CharField(max_length=80, default="")
-    post_name = models.CharField(max_length=80, default=None)
-    post_number = models.IntegerField(default=None)
+    street = models.CharField(max_length=80, default="", blank=True)
+    post_name = models.CharField(max_length=80, default="", blank=True)
+    post_number = models.IntegerField(default=None, blank=True, null=True)
 
 
 class Docs(models.Model):
