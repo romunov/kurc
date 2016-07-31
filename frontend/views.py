@@ -208,7 +208,7 @@ def docs(request):
 
 
 def stats(request):
-    if request.user.is_superuser:
+    if request.user.is_staff:
         sending_error = None
 
         req_docs = Docs.objects.filter(doccount__gt=0)
