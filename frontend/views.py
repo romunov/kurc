@@ -51,7 +51,7 @@ def settings(request):
 
     # In case CustomUser table is empty, instantiate a CustomUser with request.user.id user_id.
     try:
-        if request.POST.get('remove_personal_info'):
+        if 'remove_personal_info' in request.POST:
             UserAddress.objects.get(id=request.user.id).delete()
         prefill_customuser = UserAddress.objects.get(pk=request.user.id)
     except ObjectDoesNotExist:
@@ -72,8 +72,6 @@ def settings(request):
         write_ok = None
 
     if request.method == "POST":
-        if request.POST.get('remove_personal_info'):
-            UserAddress.objects.filter(id=request.user.id).delete()
 
         settings_form_user = BasicUserSettingsForm(request.POST, instance=prefill_user)
         try:
@@ -97,7 +95,8 @@ def settings(request):
                    'write_ok': write_ok,
                    'data_user_acc': prefill_user,
                    'data_user_add': prefill_customuser,
-                   'passto': 3}
+                   'passto': 3,
+                   'mypost': request.POST.get('remove_personal_info')}
                   )
 
 
