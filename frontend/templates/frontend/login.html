@@ -8,16 +8,84 @@
 <div class="container">
   <div class="row">
     <div class="jumbotron">
-      <h1><img src="{% static 'frontend/images/logo.png' %}" alt="logo" width="180" class="img-responsive visible-lg-inline"> <strong>Dobrodošli!</strong></h1>
-      <p>Dev no kazahzem studentis, bu varit tancit slabju den, on dev usta znajm sxuflad. Tot na klas scxastju, ostatit robenie vi hce? Tolk zxenis gda on, mai perv bratis cxetvert li? Nams pomocit mi sam, vo nad ekonomju razumijut belaruszem! Gda dirkas politia razumju es, bil futbol minutis bo, tut sport slisxil problem to! </p>
-      <p style="font-style:italic;"> Suhju hceme miakju ti vse. Es slozxju despiat angloju oni, vi gaz slovis varijm ludvozis. Moi to tolk tancit gotovijut? Ona zxiznuf pomocijsx ti, trasil polozxij bo sam, na dom sxto cxehzem. Es tot delajt voprosil! </p>
+      <h1><img src="{% static 'frontend/images/logo.png' %}" alt="logo" width="180" class="img-responsive visible-lg-inline"> <strong>K.U.R.C.</strong></h1>
+      <p style="font-size:90%;">Povzetek:<br /></p>
+      <p style="text-align: justify;">
+        V sklopu Ministrstva za notranje zadeve (bolj natančno Inšpektorat RS za notranje zadeve) pripravlja vladni
+        predlog spremembe <a href="http://pisrs.si/Pis.web/pregledPredpisa?id=ZAKO1440" target="_blank">Zakona o orožju</a>,
+        ki bo imel, če sprejet, za športno strelstvo v Sloveniji katastrofalne posledice. Te spremembe prihajajo v luči
+        prijav, ki jih podajajo občani Republike Slovenije, Inšpektorat pa čuti, da je ta predlog edini način kako se
+        otresti teh pritožb (ne pa rešiti problematike strelišč). Problematike strelišč v Sloveniji ni mogoče rešiti,
+        ker <strong>problematike ni</strong>. Ministrstvo predlaganih sprememb ne argumentira prepričljivo, celostne
+        analize pa sploh ni bilo narejene. Ko sem želel, da mi pošljejo zapisnike inšpekcijskih nadzorov, tega
+        brezplačno, skladno z <a href="http://pisrs.si/Pis.web/pregledPredpisa?id=ZAKO3336">Zakonom o dostopanju do
+        informacij javnega značaja</a>, niso želeli storiti. Zato smo prisiljeni v skupinsko akcijo zahtevanja
+        informacij javnega značaja, da pridobimo vse dokumente in pridemo zadevi do dna.
+      </p>
       <div class="row"> &nbsp; </div>
+      {% if user and user.is_anonymous %}
       <div class="row">
-        <div class="col-lg-4 col-lg-offset-4 col-md-12">
+        <div class="col-lg-5 col-lg-offset-4 col-md-12">
           <button type="button" class="btn btn-lg btn-primary btn-block center-block" onClick="window.location.href='{% url 'social:begin' 'google-oauth2' %}?next=/docs'">
-            <span style="font-size:30px;"> Sign in with Google</span> </button>
+            <span style="font-size:30px;"> Vpis z Google računom</span> </button>
         </div>
       </div>
+      {% endif %}
+      <div class="row"> &nbsp; </div>
+      <p style="font-size:90%;">Dolga verzija:</p>
+      <p style="text-align: justify;">
+        Inšpektorat RS za notranje zadeve (pod okriljem Ministrstva za notranje zadeve) ima pooblastila, da izvaja kontrolo nad strelišči, kot jih opredeljuje 50.
+        člen Zakona o orožju. To vključuje tudi strelišča, ki jih uporabljajo društva in fizične osebe. Za ta strelišča
+        je potrebno zemljišče primerno urediti in izvajati streljanje skladno s 1. členom prej omenjenega zakona in
+        podrejenimi pravilniki izvajati streljanje.<br />
+        <br />
+        Ministrstvo za notranje zadeve je zato v letu 2015 izdalo osnutek predloga Zakona o orožju, da bi uredil
+        problematiko strelišč v Sloveniji. K sodelovanju so povabili peščico strelskih zvez in Lovsko zvezo Slovenije
+        (LZS), nekaj strelskih zvez pa se je smuknilo v delovno skupino tik pred zdajci, saj javnega poziva ni bilo.
+        Kot posamezniki, ki streljamo na zasebnih parcelah skladno z Zakonom o orožju, in se nas te spremembe neposredno
+        dotikajo, tako nismo imel niti možnosti zastopati naših interesov v delovanju te skupine. So bili pa vabljeni
+        tisti, ki jih naše streljanje moti.<br />
+        <br />
+        V zadnjih 5 letih (kaj so delali prej ne povedo, imamo pa divje teorije) je bilo po podatkih IRSNZ na območju
+        Republike Slovenije izvedenih 66 nadzorov. To številko je potrebno postaviti v kontekst, saj je v Sloveniji več
+        100 strelišč, že samo v sklopu streljanja, ki ga izvajajo lovske družine (LD, to so pravno formalno društva).
+        Koliko je ostalih ("nas privatnikov") na MNZ niti ugibajo ne, tako da niti ne povedo koliko in katere ljudi bi
+        te spremembe prizadele.<br />
+        <br />
+        Po več pismih, ki sem jih naslovil na MNZ (ministrico) in IRSNZ, zadovoljivega odgovora na težka vprašanja glede
+        skropocala, ki mu pravijo "analiza stanja", nisem dobil. Tudi kolegi strelci, ki so pisarili (in se udeleževali
+        sestankov, ki so bili sklicani samo zato, ker so bili dovolj vztrajni), so bili odrinjeni na stran brez dobrih
+        argumentov.
+
+        Od MNZ-ja sem večkrat zahteval informacije, ki so jih dolžni posredovati skladno z Zakonom o dostopanju do
+        informacij javnega značaja. V nekaterih primerih odgovora sploh nisem dobil, nakar sem zahteval od Informacijega
+        pooblaščenca, da urgira. No, potem se je premaknilo, vendar dokumentov še vedno nisem dobil, saj sem dobil že
+        večkrat viden dokument, ki ne odgovori na nobeno vprašanje, kvečemu odpre nova. Inšpekcija za javno upravo pa se
+        z vsebinskimi zadevami ne ukvarja.<br />
+        <br />
+        Ker je bila mera polna, sem si zaželel, da bi vse dokumente na temo inšpekcijskih nadzorov rad prebral sam, saj
+        od ministrstva ni za pričakovati, da bi od sebe dali karkoli kvalitetnega ali, bog ne daj, relevantnega. Tako
+        sem zahteval, da mi pošljejo vse zapisnike inšpekcijskih nadzorov za leta 2010, 2011, 2012, 2013, 2014 in 2015.
+        Po daljši korespondenci smo prišli do neprehodne točke, saj na ministrstvu vztrajajo, da mi lahko za skeniranje
+        zaračunajo (želeli so 400 EUR predujma, koliko bi bila pa končna cena pa sploh niso upali ugibati), jaz pa sem
+        vztrajal, da je zakon jasen, da mi lahko zaračunajo le materialne stroške. Ker pri skeniranju dokumentov
+        materialnih stroškov ni, so moje zahteve torej brezplačne. Z mano se Informacijski pooblaščenec ni strinjal in
+        je stopil na stran MNZ-ja, češ, da je to zelo zahtevno delo, za katerega bi se porabilo veliko časa. Kar pa mene
+        kot davkoplačevalca ne zanima, če organ nima urejenega informacijskega sistema, ki bi lahko preprosto posredoval
+        informacije javnega značaja, ki nastanejo s financiranjem iz javne blagajne.
+
+        Ker do dokumentov, iz katerih bi bilo mogoče razbrati resnično problematiko, ki se domnevno tiče strelišč nisem
+        uspel priti po normalni poti, se obračam na vse simpatizerje, ki so pripravljeni pomagati. Po že večkrat
+        omenjenem zakonu je organ dolžan vsako informacijo javnega značaja, ki je bila zahtevana trikrat, objaviti na
+        spletu.<br />
+        <br />
+        Tu pride na vrsto naša moč množice. Če vsak dokument zahtevamo trije posamezniki, je Ministrstvo dolžno, da ga
+        objavi na spletu. To lahko storite preko elektronske (ali navadne) pošte. Da je postopek lažji, vam pričujoča
+        aplikacija omogoča, da zahtevate kateregakoli od 126000 (ja, sto šestindvajset tisoč) dokumentov z enim klikom.
+        Elektronsko sporočilo bo poslano z vašega GMail računa in ga lahko celo vidite v "Poslano".<br />
+        <br />
+        Roman Luštrik
+      </p>
     </div>
   </div>
 </div>

@@ -11,27 +11,16 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 import os
-from .top_secrets import SECRET_KEY, SOCIAL_AUTH_GOOGLE_OAUTH2_KEY, SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET, SCOPES, \
-    CLIENT_SECRET_FILE, APPLICATION_NAME, DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT
+from .top_secrets import *
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
-
-SECRET_KEY = SECRET_KEY
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
 ALLOWED_HOSTS = []
 
 # Application definition
 
 INSTALLED_APPS = [
-    'frontend',
     'social.apps.django_app.default',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -39,6 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'frontend',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -71,20 +61,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'kurc.wsgi.application'
-
-# Database
-# https://docs.djangoproject.com/en/1.9/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': DB_NAME,
-        'USER': DB_USER,
-        'PASSWORD': DB_PASSWORD,
-        'HOST': DB_HOST,
-        'PORT': DB_PORT
-    }
-}
 
 # A list of authentication backends.
 # See https://docs.djangoproject.com/en/1.9/ref/settings/#std:setting-AUTHENTICATION_BACKENDS
@@ -126,12 +102,17 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = SOCIAL_AUTH_GOOGLE_OAUTH2_KEY
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET
-
 LOGIN_URL = '/login'
 LOGIN_REDIRECT_URL = '/docs'
 
-SCOPES = SCOPES
-CLIENT_SECRET_FILE = CLIENT_SECRET_FILE
-APPLICATION_NAME = APPLICATION_NAME
+# https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
+
+SECURE_CONTENT_TYPE_NOSNIFF = False
+SECURE_BROWSER_XSS_FILTER = False
+SECURE_SSL_REDIRECT = False
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
+CSRF_COOKIE_HTTPONLY = False
+# X_FRAME_OPTIONS = "DENY"
+# https://docs.djangoproject.com/en/1.9/ref/middleware/#http-strict-transport-security
+SECURE_HSTS_SECONDS = 0  # set to ~3600 when on HTTPS

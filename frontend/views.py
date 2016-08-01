@@ -1,4 +1,4 @@
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render
 from django.template.context import RequestContext
 from django.contrib import auth, messages
 from django.db.models import F
@@ -7,7 +7,6 @@ from .models import UserAddress, Docs, Activity, Recipients
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
-# from django.http import HttpResponseRedirect
 from .misc_functions import get_credentials
 from httplib2 import Http
 from email.mime.text import MIMEText
@@ -26,21 +25,34 @@ def index(request):
     if request.user.is_anonymous():
         return render(request, 'frontend/login.html', context_instance=context)
     else:
+        if request.user.last_login is None:
+            render(request, 'frontend/nastavitve.html')
+
         sending_error = None
         u_docs = Activity.objects.filter(userid=request.user.id).order_by('-datumtime')
         u_docs_vals = u_docs.values('docid')
         a_docs = Docs.objects.exclude(id__in=u_docs_vals).order_by('-docname')[:10]
         return render(request, 'frontend/dokumenti.html',
                       {'doc_list': a_docs, 'user_docs': u_docs, 'sending_error': sending_error})
-    # return render(request, 'frontend/login.html')
+        # return render(request, 'frontend/login.html')
+
+
+def welcome(request):
+    return render(request, 'frontend/login.html')
 
 
 def settings(request):
+
+    if request.user.is_anonymous():
+        return render(request, 'frontend/404.html')
+
     # Prepare data to be filled into forms. User should always exist so no try/except call.
     prefill_user = User.objects.get(pk=request.user.id)
 
     # In case CustomUser table is empty, instantiate a CustomUser with request.user.id user_id.
     try:
+        if 'remove_personal_info' in request.POST:
+            UserAddress.objects.get(id=request.user.id).delete()
         prefill_customuser = UserAddress.objects.get(pk=request.user.id)
     except ObjectDoesNotExist:
         prefill_customuser = UserAddress(id=User(id=request.user.id))
@@ -52,7 +64,7 @@ def settings(request):
                                                             'last_name': prefill_user.last_name,
                                                             'email': prefill_user.email},
                                                    instance=prefill_user)
-        # TODO: reference na pošto se bi verjetno lahko implementiralo tako, da bi za vnešeno poštno številko iz tabele glede na id poiskal še ime pošte
+
         settings_form_customuser = UserAddressSettingsForm(initial={'street': prefill_customuser.street,
                                                                     'post_name': prefill_customuser.post_name,
                                                                     'post_number': prefill_customuser.post_number},
@@ -60,17 +72,18 @@ def settings(request):
         write_ok = None
 
     if request.method == "POST":
+
         settings_form_user = BasicUserSettingsForm(request.POST, instance=prefill_user)
         try:
             settings_form_customuser = UserAddressSettingsForm(request.POST, instance=prefill_customuser)
         except ObjectDoesNotExist:
             settings_form_customuser = UserAddressSettingsForm(request.POST)
 
-        # if settings_form_user.is_valid() and settings_form_customuser.is_valid():
         if settings_form_customuser.is_valid():
             settings_form_user.save()
             settings_form_customuser.save()
             write_ok = True
+
         else:
             settings_form_user = BasicUserSettingsForm(request.POST)
             settings_form_customuser = UserAddressSettingsForm(request.POST)
@@ -81,7 +94,9 @@ def settings(request):
                    'settings_form_customuser': settings_form_customuser,
                    'write_ok': write_ok,
                    'data_user_acc': prefill_user,
-                   'data_user_add': prefill_customuser}
+                   'data_user_add': prefill_customuser,
+                   'passto': 3,
+                   'mypost': request.POST.get('remove_personal_info')}
                   )
 
 
@@ -95,6 +110,22 @@ def login(request):
 
 
 def docs(request):
+
+    passto = None
+
+    # send away non-registered users
+    if request.user.is_anonymous():
+        return render(request, 'frontend/404.html')
+
+    # Invite first timers to add their information.
+    if request.user.last_login is None:
+        passto = 'First time logger.'
+
+    try:
+        sadd = UserAddress.objects.get(pk=request.user.id)
+    except UserAddress.DoesNotExist as de:
+        passto = 'No address (error %s).' % de
+
     # Initiate some objects and gather data.
     sending_error = None
 
@@ -105,9 +136,7 @@ def docs(request):
     u_docs_vals = u_docs.values('docid')
 
     # ... and exclude them from Docs
-    a_docs = Docs.objects.exclude(id__in=u_docs_vals).order_by('-docname')
-    # TODO: dodaj paginacijo v tabelo za Doc in Activity
-    # TODO: fino bi blo met še filtriranje, po možnosti z bootstrap tabelam
+    a_docs = Docs.objects.exclude(id__in=u_docs_vals).order_by('-doccount')[1:500]
 
     if request.method == "POST":
         # Get user address
@@ -119,7 +148,7 @@ def docs(request):
         # Update Activity table, insert record of a requested document.
         my_docid = Docs.objects.get(docname=clicked_doc)
         my_userid = User.objects.get(pk=request.user.id)
-        my_sentto = Recipients.objects.get(id=1)  # currently recipient hard-coded to roman.lustrik@biolitika.si
+        my_sentto = Recipients.objects.get(id=1)
 
         try:
             creds = get_credentials()
@@ -174,4 +203,20 @@ def docs(request):
             sending_error = 'Error: %s' % te
 
     return render(request, 'frontend/dokumenti.html',
-                  {'doc_list': a_docs, 'user_docs': u_docs, 'sending_error': sending_error})
+                  {'doc_list': a_docs, 'user_docs': u_docs, 'sending_error': sending_error,
+                   'passto': passto})
+
+
+def stats(request):
+    if request.user.is_staff:
+        sending_error = None
+
+        req_docs = Docs.objects.filter(doccount__gt=0)
+        active_docs = Activity.objects.all()
+
+        return render(request, 'frontend/stats.html',
+                      {'all_req_docs': req_docs,
+                       'activity_docs': active_docs,
+                       'sending_error': sending_error})
+    else:
+        return render(request, 'frontend/404.html')

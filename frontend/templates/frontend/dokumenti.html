@@ -1,12 +1,15 @@
 {% extends 'frontend/base.html' %}
 {% load staticfiles %}
-
+<!-- TODO: v bistvu bi lahko v primeru neizpolnjenih nastavitev neprikazal gumbek za pošiljanje -->
 {% block content %}
+
+{% if passto == None %}
 <div class="container">
     <!-- custom tabela iz pythona -->
     <div class="row">
         <div class="col-lg-8 col-lg-offset-2">
             <h3><strong>Dokumenti, ki še nimajo treh zahtevkov</strong></h3>
+            <h5>(prikazanih le prvih 500)</h5>
             <hr>
             {% if messages %}
             {% for message in messages %}
@@ -63,20 +66,28 @@
                         <!-- TODO: dodaj link za upload dokumenta -->
                     </tr>
                     </thead>
-                    <form class="form-horizontal" method="post" action="/docs">{% csrf_token %}
-                        <tbody>
-                        {% for doc in user_docs %}
-                        <tr>
-                            <td>{{ doc.docid.docname }}</td>
-                            <td>{{ doc.datumtime }}</td>
-                        </tr>
-                        {% endfor %}
-                        </tbody>
-                    </form>
+                    <tbody>
+                    {% for doc in user_docs %}
+                    <tr>
+                        <td>{{ doc.docid.docname }}</td>
+                        <td>{{ doc.datumtime }}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
                 </table>
             </div>
         </div>
     </div>
 </div>
+{% else %}
+<div class="container">
+    <!-- custom tabela iz pythona -->
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2">
+            <h2>Naslov uporabnika <a href="/settings">v nastavitvah</a> še ni vnešen.</h2>
+        </div>
+    </div>
+</div>
+{% endif %}
 <!-- end testni DataTable -->
 {% endblock content %}
