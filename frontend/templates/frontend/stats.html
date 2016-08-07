@@ -41,7 +41,7 @@
                     <thead>
                     <tr>
                         <th>ID dokumenta</th>
-                        <th>N# zahtevkov</th>
+                        <!-- <th>N# zahtevkov</th> -->
                         <th>Uporabnik</th>
                         <th>Datum zahtevka</th>
                     </tr>
@@ -51,7 +51,7 @@
                     {% for doc in activity_docs %}
                     <tr>
                         <td>{{ doc.docid.docname }}</td>
-                        <td>{{ doc.docid.doccount }}</td>
+                        <!-- <td>{{ doc.docid.doccount }}</td> -->
                         <td>{{ doc.userid.username }}</td>
                         <td>{{ doc.datumtime }}</td>
                     </tr>
