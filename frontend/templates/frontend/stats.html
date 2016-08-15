@@ -6,14 +6,14 @@
     <!-- custom tabela iz pythona -->
     <div class="row">
         <div class="col-lg-8 col-lg-offset-2">
-            <h3><strong>Vsi zahtevani dokumenti</strong></h3>
+            <h3><strong>Vse zahtevane zadeve</strong></h3>
             <hr>
             <div class="table-responsive">
                 {% csrf_token %}
                 <table id="table_id" class="table display">
                     <thead>
                     <tr>
-                        <th>ID dokumenta <!--<span class="glyphicon glyphicon-triangle-bottom"></span>--></th>
+                        <th>ID zadeve <!--<span class="glyphicon glyphicon-triangle-bottom"></span>--></th>
                         <th>N# zahtevkov</th>
                     </tr>
                     </thead>
@@ -40,8 +40,7 @@
                 <table id="table_id_activity" class="table display">
                     <thead>
                     <tr>
-                        <th>ID dokumenta</th>
-                        <!-- <th>N# zahtevkov</th> -->
+                        <th>ID zadeve</th>
                         <th>Uporabnik</th>
                         <th>Datum zahtevka</th>
                     </tr>
