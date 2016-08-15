@@ -136,7 +136,7 @@ def docs(request):
     u_docs_vals = u_docs.values('docid')
 
     # ... and exclude them from Docs
-    a_docs = Docs.objects.exclude(id__in=u_docs_vals).order_by('-doccount')[1:500]
+    a_docs = Docs.objects.exclude(id__in=u_docs_vals).filter(doccount__lt=3)[1:100]
 
     if request.method == "POST":
         # Get user address
