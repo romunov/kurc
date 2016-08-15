@@ -10,3 +10,4 @@ kurc/top_secrets.py
 kurc.Rproj
 frontend/secrets/client_secret.json
 frontend/fixtures/docs_full.json
+.Rproj.user
