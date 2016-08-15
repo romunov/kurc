@@ -68,7 +68,8 @@
                 <div class="row">
                     <div class="col-lg-5 col-lg-offset-3 col-sm-4 col-sm-offset-4">
                         {% if write_ok %}
-                        <button type="submit" class="btn btn-success btn-lg btn-primary center-block btn-block">Shranjeno
+                        <button type="submit" class="btn btn-success btn-lg btn-primary center-block btn-block">
+                            Shranjeno
                             <span class="glyphicon glyphicon-ok" aria-hidden="true" aria-label="naprej"> </span>
                         </button>
                         {% else %}
@@ -81,7 +82,7 @@
                 </div>
             </form>
             <div class="row">
-                <br />
+                <br/>
                 <div class="col-lg-5 col-lg-offset-3 col-md-12">
                     <form class="form-horizontal" method="post" action="/settings">
                         {% csrf_token %}
@@ -120,16 +121,17 @@
                 </tr>
                 <tr>
                     <td align="left" style="padding: 10px 5px 10px 5px;">
-                        <strong>ZADEVA: Zahteva za dostop do informacije javnega značaja [št. dokumenta]</strong>
+                        <strong>ZADEVA: Zahteva za dostop do informacije javnega značaja, zadeva [št. zadeve]</strong>
                     </td>
                 </tr>
                 <tr>
                     <td align="left" style="padding: 10px 5px 10px 5px;">
                         Želim, da mi skladno z Zakono o dostop do informacij javnega značaja (Uradni list RS, št. 51/06
-                        -
-                        uradno prečiščeno besedilo, 117/06 – ZDavP-2, 23/14, 50/14, 19/15 – odl. US in 102/15)
-                        posredujete
-                        dokument številka [št. dokumenta]. Dokument želim prejeti na zgoraj naveden elektronski naslov.
+                        - uradno prečiščeno besedilo, 117/06 – ZDavP-2, 23/14, 50/14, 19/15 – odl. US in 102/15)
+                        posredujete zaključni dokument zadeve številka [št. zadeve]. V kolikor dokument vsebuje osebne
+                        podatke, se želim z dokumentom seznaniti delno, tako, da osebne podatke odstranite oz. zatemnite
+                        skladno z Zakonom o varovanju osebnih podatkov. Dokumente želim prejeti v elektronski obliki na
+                        zgoraj naveden elektronski naslov.
                     </td>
                 </tr>
                 <tr>

@@ -39,6 +39,7 @@ Given data, produce a html string which can be passed to MIMEMultiPart or MIMETy
 """
 
 
+# TODO: hruske pošlje še pravilno obliko zahtevka, da se posreduje tudi redaktirane dokumente
 def create_html_string(first_name, last_name, street, post_number, post_name, email, doc_name, output):
     html = """
     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -72,12 +73,17 @@ def create_html_string(first_name, last_name, street, post_number, post_name, em
             </tr>
             <tr>
                 <td align="left" style="padding: 10px 5px 10px 5px;">
-                    <strong>ZADEVA: Zahteva za dostop do informacije javnega značaja št. %s</strong>
+                    <strong>ZADEVA: Zahteva za dostop do informacije javnega značaja, zadeve št. %s</strong>
                 </td>
             </tr>
             <tr>
                 <td align="left" style="padding: 10px 5px 10px 5px;">
-                    Želim, da mi skladno z Zakono o dostop do informacij javnega značaja (Uradni list RS, št. 51/06- uradno prečiščeno besedilo, 117/06 – ZDavP-2, 23/14, 50/14, 19/15 – odl. US in 102/15) posredujete dokument številka %s. Dokument želim prejeti na zgoraj naveden elektronski naslov.
+                    Želim, da mi skladno z Zakono o dostop do informacij javnega značaja (Uradni list RS, št. 51/06 -
+                    uradno prečiščeno besedilo, 117/06 – ZDavP-2, 23/14, 50/14, 19/15 – odl. US in 102/15) posredujete
+                    zaključni dokument zadeve številka %s. V kolikor dokument vsebuje osebne podatke, se želim z
+                    dokumentom seznaniti delno, tako, da osebne podatke odstranite oz. zatemnite skladno z Zakonom o
+                    varovanju osebnih podatkov. Dokumente želim prejeti v elektronski obliki na zgoraj naveden
+                    elektronski naslov.
                 </td>
             </tr>
             <tr>
@@ -103,11 +109,14 @@ Ministrstvo za notranje zadeve
 1501 Ljubljana
 mnz@gov.si
 
-ZADEVA: Zahteva za dostop do informacije javnega značaja št. %s
+ZADEVA: Zahteva za dostop do informacije javnega značaja, zadeve št. %s
 
-Želim, da mi skladno z Zakono o dostop do informacij javnega značaja (Uradni list RS, št. 51/06 - uradno prečiščeno
-besedilo, 117/06 – ZDavP-2, 23/14, 50/14, 19/15 – odl. US in 102/15) posredujete dokument številka %s. Dokument želim
-prejeti na zgoraj naveden elektronski naslov.
+Želim, da mi skladno z Zakono o dostop do informacij javnega značaja (Uradni list RS, št. 51/06 -
+uradno prečiščeno besedilo, 117/06 – ZDavP-2, 23/14, 50/14, 19/15 – odl. US in 102/15) posredujete
+zaključni dokument zadeve številka %s. V kolikor dokument vsebuje osebne podatke, se želim z
+dokumentom seznaniti delno, tako, da osebne podatke odstranite oz. zatemnite skladno z Zakonom o
+varovanju osebnih podatkov. Dokumente želim prejeti v elektronski obliki na zgoraj naveden
+elektronski naslov.
 
 
 %s %s
