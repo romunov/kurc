@@ -42,7 +42,7 @@
             {% if all_docs %}
             <ul>
                 {% for doc in all_docs %}
-                <li><a href="{{ doc.docfile.url }}">{{ doc.docname }}</a></li>
+                <li><a href="{{ doc.id }}" target="_blank">{{ doc.docname }}</a></li>
                 {% endfor %}
             </ul>
             {% else %}

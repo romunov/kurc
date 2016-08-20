@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.template.context import RequestContext
 from django.contrib import auth, messages
 from django.db.models import F
+from django.http import HttpResponse
 from .forms import UserAddressSettingsForm, BasicUserSettingsForm, UploadDocFileForm
 from .models import UserAddress, Docs, Activity, Recipients, UploadedDocs
 from django.contrib.auth.models import User
@@ -16,6 +17,19 @@ from apiclient import discovery
 from urllib.error import HTTPError
 from .misc_functions import create_html_string
 
+
+def view_file(request, doc_id):
+    if request.user.is_anonymous:
+        return render(request, 'frontend/404.html')
+
+    # return render(request, 'frontend/upload_docs.html', {'docid': doc_id})
+    doc = UploadedDocs.objects.get(id=doc_id)
+
+    with open(doc.docfile.path, 'rb') as pdf:
+        response = HttpResponse(pdf.read(), content_type='application/pdf')
+        response['Content-Disposition'] = 'inline;filename=%s' % doc.docfile.name
+    pdf.closed
+    return response
 
 def upload_file(request):
     if request.method == "POST":

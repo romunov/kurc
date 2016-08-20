@@ -20,8 +20,8 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'docs')
-MEDIA_URL = '/docs/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'uploaded')
+MEDIA_URL = '/uploaded/'
 
 INSTALLED_APPS = [
     'social.apps.django_app.default',
