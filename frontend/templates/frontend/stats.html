@@ -75,7 +75,7 @@
                 <tbody>
                 {% for doc in user_upload %}
                 <tr>
-                    <td><a href={{ doc.docfile.url }}>{{ doc.docname }}</a></td>
+                    <td><a href="{{ doc.id }}" target="_blank">{{ doc.docname }}</a></td>
                     <td>{{ doc.docuser }}</td>
                     <td>{{ doc.doctime }}</td>
                 </tr>

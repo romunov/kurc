@@ -31,6 +31,7 @@ def view_file(request, doc_id):
     pdf.closed
     return response
 
+
 def upload_file(request):
     if request.method == "POST":
         form = UploadDocFileForm(request.POST, request.FILES)
@@ -53,11 +54,14 @@ def upload_file(request):
         form = UploadDocFileForm()
 
     all_docs = UploadedDocs.objects.all()
+    num_docs = len(all_docs)
 
     return render(request,
                   'frontend/upload_docs.html',
                   {'all_docs': all_docs,
-                   'my_form': form})
+                   'my_form': form,
+                   'num_docs': num_docs  # pass to badge for document count
+                   })
 
 
 def index(request):

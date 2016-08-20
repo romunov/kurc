@@ -8,7 +8,8 @@
             <h3><strong>Pošlji dokument</strong></h3>
             {% if messages %}
             {% for message in messages %}
-            <div {% if message.tags %} class="alert alert-{{ message.tags }} role='alert'" {% endif %}>{{ message }}</div>
+            <div {% if message.tags %} class="alert alert-{{ message.tags }} role='alert'" {% endif %}>{{ message }}
+            </div>
             {% endfor %}
             {% endif %}
             <p>Priporočamo, da datoteko poimenujete po št. zadeve, npr. <code>090-2016/01.pdf</code>.</p>
@@ -37,14 +38,30 @@
             </form>
         </div>
         <div class="col-lg-8 col-lg-offset-2">
-            <h3><strong>Dokumenti, ki so na voljo</strong></h3>
+            <h3><strong>Dokumenti, ki so na voljo
+                {% if num_docs %}
+                <span class="badge">{{ num_docs }}</span>
+                {% else %}
+                <span class="badge">{{ 0 }}</span>
+                {% endif %}
+            </strong></h3>
             <hr>
             {% if all_docs %}
-            <ul>
+            <table id="table_id_docs" class="table display">
+                <thead>
+                <tr>
+                    <th>Dokument</th>
+                    <th>Poslano dne</th>
+                </tr>
+                </thead>
+                <tbody>
                 {% for doc in all_docs %}
-                <li><a href="{{ doc.id }}" target="_blank">{{ doc.docname }}</a></li>
+                <tr>
+                    <td><a href="{{ doc.id }}" target="_blank">{{ doc.docname }}</a></td>
+                    <td>{{ doc.doctime }}</td>
+                </tr>
                 {% endfor %}
-            </ul>
+            </table>
             {% else %}
             <p>Ni dokumentov.</p>
             {% endif %}
