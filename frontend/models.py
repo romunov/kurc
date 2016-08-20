@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from frontend.misc_functions import validate_file_extension
 
 
 class Recipients(models.Model):
@@ -47,6 +48,6 @@ class Activity(models.Model):
 class UploadedDocs(models.Model):
     id = models.AutoField(primary_key=True)
     docname = models.CharField(max_length=50)
-    docfile = models.FileField()
+    docfile = models.FileField(validators=[validate_file_extension])
     docuser = models.ForeignKey(User, on_delete=models.CASCADE)
     doctime = models.DateTimeField(auto_now_add=True, blank=True)

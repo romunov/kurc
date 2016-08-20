@@ -8,10 +8,10 @@
             <h3><strong>Pošlji dokument</strong></h3>
             {% if messages %}
             {% for message in messages %}
-            <div {% if message.tags %} class="alert alert-{{ message.tags }}" {% endif %}>{{ message }}</div>
+            <div {% if message.tags %} class="alert alert-{{ message.tags }} role='alert'" {% endif %}>{{ message }}</div>
             {% endfor %}
             {% endif %}
-            <p>Datoteko poimenuj po imenu zadeve, npr. 090-2016/01.pdf.</p>
+            <p>Priporočamo, da datoteko poimenujete po št. zadeve, npr. <code>090-2016/01.pdf</code>.</p>
             <form class='form-horizontal' action="{% url 'upload_file' %}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="form-group">
@@ -19,7 +19,7 @@
                     <label for="{{ my_form.docname.id_for_label }}"
                            class="col-sm-3 control-label">Št. zadeve:</label>
                     <div class="col-sm-6">
-                        {{ my_form.docname }} (npr. 090-2016/03)
+                        {{ my_form.docname }}
                     </div>
                 </div>
                 <br/>

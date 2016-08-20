@@ -5,7 +5,7 @@ from django.db.models import F
 from .forms import UserAddressSettingsForm, BasicUserSettingsForm, UploadDocFileForm
 from .models import UserAddress, Docs, Activity, Recipients, UploadedDocs
 from django.contrib.auth.models import User
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.utils import timezone
 from .misc_functions import get_credentials
 from httplib2 import Http
@@ -27,8 +27,14 @@ def upload_file(request):
                                   doctime=timezone.now())
             newdoc.save()
             messages.success(request,
-                             "Dokument %s poslan." % request.POST['docname'])
+                             "Dokument %s uspešno prejet." % request.POST['docname'])
             form = UploadDocFileForm()
+        else:
+            messages.error(request,
+                           'Datotek tega formata pri nas ne sprejemamo. Veljavni so samo .pdf, .jpg, .jpeg, \
+                           .png, .doc in .docx',
+                           extra_tags="danger")
+
     else:
         form = UploadDocFileForm()
 

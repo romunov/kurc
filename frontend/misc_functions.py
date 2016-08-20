@@ -5,10 +5,6 @@ from oauth2client import client
 from oauth2client import tools
 from kurc.settings import CLIENT_SECRET_FILE, SCOPES, APPLICATION_NAME
 from django.core.exceptions import ValidationError
-from django.db.models import FileField
-from django.forms import forms
-from django.template.defaultfilters import filesizeformat
-from django.utils.translation import ugettext_lazy as _
 
 
 # If modifying these scopes, delete your previously saved credentials
@@ -140,3 +136,10 @@ def validate_file_extension(value):
     valid_extensions = ['.pdf', '.doc', '.docx', '.jpg', '.jpeg', '.png']
     if ext not in valid_extensions:
         raise ValidationError(u'File not supported!')
+
+
+def validate_file_extension(value):
+    ext = os.path.splitext(value.name)[1]  # [0] returns path+filename
+    valid_extensions = ['.pdf', '.doc', '.docx', '.jpg', '.png', '.jpeg']
+    if not ext.lower() in valid_extensions:
+        raise ValidationError(u'Nepodprt format.')
