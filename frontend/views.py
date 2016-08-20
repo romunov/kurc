@@ -16,14 +16,16 @@ from base64 import urlsafe_b64encode
 from apiclient import discovery
 from urllib.error import HTTPError
 from .misc_functions import create_html_string
+from os import path
 
 
 def view_file(request, doc_id):
     if request.user.is_anonymous:
         return render(request, 'frontend/404.html')
 
-    # return render(request, 'frontend/upload_docs.html', {'docid': doc_id})
     doc = UploadedDocs.objects.get(id=doc_id)
+    if not path.isfile(doc.docfile.path):
+        return render(request, 'frontend/404.html')
 
     with open(doc.docfile.path, 'rb') as pdf:
         response = HttpResponse(pdf.read(), content_type='application/pdf')
