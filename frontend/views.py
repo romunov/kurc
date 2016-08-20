@@ -24,6 +24,7 @@ def view_file(request, doc_id):
         return render(request, 'frontend/404.html')
 
     doc = UploadedDocs.objects.get(id=doc_id)
+
     if not path.isfile(doc.docfile.path):
         return render(request, 'frontend/404.html')
 
@@ -35,6 +36,9 @@ def view_file(request, doc_id):
 
 
 def upload_file(request):
+    if request.user.is_anonymous():
+        return render(request, 'frontend/404.html')
+
     if request.method == "POST":
         form = UploadDocFileForm(request.POST, request.FILES)
         if form.is_valid():

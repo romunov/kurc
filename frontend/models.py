@@ -30,7 +30,7 @@ class Docs(models.Model):
 
     class Meta:
         verbose_name = 'Document'
-        verbose_name_plural = 'Documents'
+        verbose_name_plural = 'List of documents'
 
     # Added this because it changes how entries are displayed in the Admin site.
     def __str__(self):
@@ -51,3 +51,10 @@ class UploadedDocs(models.Model):
     docfile = models.FileField(validators=[validate_file_extension])
     docuser = models.ForeignKey(User, on_delete=models.CASCADE)
     doctime = models.DateTimeField(auto_now_add=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Uploaded document'
+        verbose_name_plural = 'Uploaded documents'
+
+    def __str__(self):
+        return self.docname

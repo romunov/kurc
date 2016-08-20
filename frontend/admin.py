@@ -1,6 +1,6 @@
 from django.contrib import admin
 # Register your models here.
-from .models import Docs
+from .models import Docs, UploadedDocs
 
 
 def change_to_active(modeladmin, request, queryset):
@@ -23,4 +23,11 @@ class DocsInAdmin(admin.ModelAdmin):
     actions = [change_from_active, change_to_active]
 
 
+class UploadedDocsAdmin(admin.ModelAdmin):
+    fields = ('id', 'docname', 'docfile', 'docuser', 'doctime')
+    list_display = ('docname', 'docfile', 'docuser')
+    list_filter = ('docname', 'docfile')
+
+
 admin.site.register(Docs, DocsInAdmin)
+admin.site.register(UploadedDocs, UploadedDocsAdmin)
