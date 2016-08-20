@@ -64,7 +64,7 @@
     <div class="row">
         <div class="col-lg-8 col-lg-offset-2">
             <h3><strong>Zgodovina pošiljanja</strong></h3>
-            <table id="table_id_activity" class="table display">
+            <table id="table_id_upload" class="table display">
                 <thead>
                 <tr>
                     <th>ID dokumenta</th>
@@ -75,7 +75,7 @@
                 <tbody>
                 {% for doc in user_upload %}
                 <tr>
-                    <td><a href={{ doc.docfile.url }}>{{ doc.docname }}</td>
+                    <td><a href={{ doc.docfile.url }}>{{ doc.docname }}</a></td>
                     <td>{{ doc.docuser }}</td>
                     <td>{{ doc.doctime }}</td>
                 </tr>
