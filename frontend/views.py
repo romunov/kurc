@@ -2,8 +2,8 @@ from django.shortcuts import render
 from django.template.context import RequestContext
 from django.contrib import auth, messages
 from django.db.models import F
-from .forms import UserAddressSettingsForm, BasicUserSettingsForm
-from .models import UserAddress, Docs, Activity, Recipients
+from .forms import UserAddressSettingsForm, BasicUserSettingsForm, UploadDocFileForm
+from .models import UserAddress, Docs, Activity, Recipients, UploadedDocs
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
@@ -15,6 +15,29 @@ from base64 import urlsafe_b64encode
 from apiclient import discovery
 from urllib.error import HTTPError
 from .misc_functions import create_html_string
+
+
+def upload_file(request):
+    if request.method == "POST":
+        form = UploadDocFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            newdoc = UploadedDocs(docname=request.POST['docname'],
+                                  docfile=request.FILES['docfile'],
+                                  docuser=User.objects.get(pk=request.user.id),
+                                  doctime=timezone.now())
+            newdoc.save()
+            messages.success(request,
+                             "Dokument %s poslan." % request.POST['docname'])
+            form = UploadDocFileForm()
+    else:
+        form = UploadDocFileForm()
+
+    all_docs = UploadedDocs.objects.all()
+
+    return render(request,
+                  'frontend/upload_docs.html',
+                  {'all_docs': all_docs,
+                   'my_form': form})
 
 
 def index(request):
@@ -213,10 +236,12 @@ def stats(request):
 
         req_docs = Docs.objects.filter(doccount__gt=0)
         active_docs = Activity.objects.all()
+        user_upload = UploadedDocs.objects.all()
 
         return render(request, 'frontend/stats.html',
                       {'all_req_docs': req_docs,
                        'activity_docs': active_docs,
+                       'user_upload': user_upload,
                        'sending_error': sending_error})
     else:
         return render(request, 'frontend/404.html')

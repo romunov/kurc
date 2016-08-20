@@ -5,7 +5,10 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from base64 import urlsafe_b64encode
 from .misc_functions import create_html_string
+from frontend.models import UserAddress
 
+x = UserAddress.objects.filter(id=1)
+UserAddress.objects.filter(id=1).delete()
 
 # add 1 to doccount of document '0-1/2007/11'
 Docs.objects.filter(docname='0-1/2007/11').update(doccount=F('doccount') + 1)

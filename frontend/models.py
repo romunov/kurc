@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from frontend.misc_functions import ContentTypeRestrictedFileField
 
 
 class Recipients(models.Model):
@@ -42,3 +43,11 @@ class Activity(models.Model):
     userid = models.ForeignKey(User, on_delete=models.CASCADE)
     sentto = models.ForeignKey(Recipients, on_delete=models.CASCADE)
     datumtime = models.DateTimeField()
+
+
+class UploadedDocs(models.Model):
+    id = models.AutoField(primary_key=True)
+    docname = models.CharField(max_length=50)
+    docfile = models.FileField()
+    docuser = models.ForeignKey(User, on_delete=models.CASCADE)
+    doctime = models.DateTimeField(auto_now_add=True, blank=True)

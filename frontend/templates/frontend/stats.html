@@ -60,5 +60,29 @@
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2">
+            <h3><strong>Zgodovina pošiljanja</strong></h3>
+            <table id="table_id_activity" class="table display">
+                <thead>
+                <tr>
+                    <th>ID dokumenta</th>
+                    <th>Uporabnik</th>
+                    <th>Poslano dne</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for doc in user_upload %}
+                <tr>
+                    <td><a href={{ doc.docfile.url }}>{{ doc.docname }}</td>
+                    <td>{{ doc.docuser }}</td>
+                    <td>{{ doc.doctime }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 {% endblock content %}

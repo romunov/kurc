@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
 from django import forms
 from django.contrib.auth.models import User
-from frontend.models import UserAddress
+from frontend.models import UserAddress, UploadedDocs
 
 
 class BasicUserSettingsForm(forms.ModelForm):
@@ -23,3 +24,14 @@ class UserAddressSettingsForm(forms.ModelForm):
             'post_name': forms.TextInput(attrs={'class': 'form-control'}),
             'post_number': forms.NumberInput(attrs={'class': 'form-control'})
         }
+
+
+class UploadDocFileForm(forms.ModelForm):
+    widgets = {
+        'docname': forms.TextInput(attrs={'class': 'form-control'}),
+        'docfile': forms.ClearableFileInput()
+    }
+
+    class Meta:
+        model = UploadedDocs
+        fields = ['docname', 'docfile']

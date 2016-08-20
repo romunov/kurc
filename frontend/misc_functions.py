@@ -4,6 +4,11 @@ import oauth2client
 from oauth2client import client
 from oauth2client import tools
 from kurc.settings import CLIENT_SECRET_FILE, SCOPES, APPLICATION_NAME
+from django.core.exceptions import ValidationError
+from django.db.models import FileField
+from django.forms import forms
+from django.template.defaultfilters import filesizeformat
+from django.utils.translation import ugettext_lazy as _
 
 
 # If modifying these scopes, delete your previously saved credentials
@@ -34,13 +39,11 @@ def get_credentials():
     return credentials
 
 
-"""
-Given data, produce a html string which can be passed to MIMEMultiPart or MIMEType
-"""
-
-
-# TODO: hruske pošlje še pravilno obliko zahtevka, da se posreduje tudi redaktirane dokumente
 def create_html_string(first_name, last_name, street, post_number, post_name, email, doc_name, output):
+    """
+    Given data, produce a html string which can be passed to MIMEMultiPart or MIMEType
+    """
+
     html = """
     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
     <html xmlns="http://www.w3.org/1999/xhtml">
@@ -127,3 +130,54 @@ elektronski naslov.
         return text
     if output == "html":
         return html
+
+
+def validate_file_extension(value):
+    """
+    Accept only certain file extensions. From http://stackoverflow.com/a/8826854/322912
+    """
+    ext = os.path.splitext(value.name)[1]
+    valid_extensions = ['.pdf', '.doc', '.docx', '.jpg', '.jpeg', '.png']
+    if ext not in valid_extensions:
+        raise ValidationError(u'File not supported!')
+
+
+class ContentTypeRestrictedFileField(FileField):
+    """
+    Same as FileField, but you can specify:
+        * content_types - list containing allowed content_types.
+        Example: ['application/pdf', 'image/jpeg']
+        * max_upload_size - a number indicating the maximum file
+        size allowed for upload.
+            2.5MB - 2621440
+            5MB - 5242880
+            10MB - 10485760
+            20MB - 20971520
+            50MB - 5242880
+            100MB 104857600
+            250MB - 214958080
+            500MB - 429916160
+    """
+
+    def __init__(self, *args, **kwargs):
+        self.content_types = kwargs.pop("content_types")
+        self.max_upload_size = kwargs.pop("max_upload_size")
+
+        super(ContentTypeRestrictedFileField, self).__init__(*args, **kwargs)
+
+    def clean(self, *args, **kwargs):
+        data = super(ContentTypeRestrictedFileField, self).clean(*args, **kwargs)
+        file = data.file
+        try:
+            content_type = file.content_type
+            if content_type in self.content_types:
+                if file._size >= self.max_upload_size:
+                    raise forms.ValidationError(_('Please keep filesize under'
+                                                  '%s. Current filesize %s')
+                                                % (filesizeformat(self.max_upload_size), filesizeformat(file._size)))
+            else:
+                raise forms.ValidationError(_('Filetype not supported.'))
+        except AttributeError:
+            pass
+
+        return data

@@ -36,17 +36,23 @@
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#topFixedNavbar1"
                     aria-expanded="false"><span class="sr-only">Toggle navigation</span><span
                     class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
-            <a class="navbar-brand" href="/welcome"> <img src="{% static 'frontend/images/Kurc, secondary, logo.png' %}" alt="logo" width="107" height="30"></span></a></div>
+            <a class="navbar-brand" href="/welcome"> <img src="{% static 'frontend/images/Kurc, secondary, logo.png' %}"
+                                                          alt="logo" width="107" height="30"></span></a></div>
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="topFixedNavbar1">
             <ul class="nav navbar-nav">
                 {% if user and not user.is_anonymous %}
-                <li><a href="/docs"><span class="glyphicon glyphicon-duplicate"></span> Dokumenti</a></li>
+                <li><a href="/docs"><span class="glyphicon glyphicon-comment"></span> Zahtevaj dokument</a></li>
                 {% endif %}
             </ul>
             <ul class="nav navbar-nav">
                 {% if user and user.is_staff %}
                 <li><a href="/stats"><span class="glyphicon glyphicon-stats"></span> Statistika</a></li>
+                {% endif %}
+            </ul>
+            <ul class="nav navbar-nav">
+                {% if user and user.is_staff %}
+                <li><a href="/uploaded"><span class="glyphicon glyphicon-saved"></span> Dokumenti</a></li>
                 {% endif %}
             </ul>
             <ul class="nav navbar-nav navbar-right">
@@ -95,6 +101,7 @@
             "order": [[2, "desc"]]
         });
     });
+
 </script>
 </body>
 </html>

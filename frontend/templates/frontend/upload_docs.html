@@ -1,0 +1,54 @@
+{% extends 'frontend/base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2">
+            <h3><strong>Pošlji dokument</strong></h3>
+            {% if messages %}
+            {% for message in messages %}
+            <div {% if message.tags %} class="alert alert-{{ message.tags }}" {% endif %}>{{ message }}</div>
+            {% endfor %}
+            {% endif %}
+            <p>Datoteko poimenuj po imenu zadeve, npr. 090-2016/01.pdf.</p>
+            <form class='form-horizontal' action="{% url 'upload_file' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ my_form.docname.errors }}
+                    <label for="{{ my_form.docname.id_for_label }}"
+                           class="col-sm-3 control-label">Št. zadeve:</label>
+                    <div class="col-sm-6">
+                        {{ my_form.docname }} (npr. 090-2016/03)
+                    </div>
+                </div>
+                <br/>
+                <label for="{{ my_form.docname.id_for_label }}"
+                       class="col-sm-3 control-label">Pripni datoteko:</label>
+                <div class="col-sm-5">
+                    {{ my_form.docfile }}
+                </div>
+                <br/>
+                <br/>
+                <button type="submit" class="btn btn-default btn-lg btn-primary center-block btn-block"
+                        data-toggle="popup" data-placement="right"
+                        title="Dokument pošlji na strežnik.">Pošlji dokument
+                </button>
+            </form>
+        </div>
+        <div class="col-lg-8 col-lg-offset-2">
+            <h3><strong>Dokumenti, ki so na voljo</strong></h3>
+            <hr>
+            {% if all_docs %}
+            <ul>
+                {% for doc in all_docs %}
+                <li><a href="{{ doc.docfile.url }}">{{ doc.docname }}</a></li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>Ni dokumentov.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock content %}
