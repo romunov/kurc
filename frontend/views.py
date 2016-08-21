@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from .forms import UserAddressSettingsForm, BasicUserSettingsForm, UploadDocFileForm
 from .models import UserAddress, Docs, Activity, Recipients, UploadedDocs
 from django.contrib.auth.models import User
-from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.utils import timezone
 from .misc_functions import get_credentials
 from httplib2 import Http
@@ -201,7 +201,10 @@ def docs(request):
         # Update Activity table, insert record of a requested document.
         my_docid = Docs.objects.get(docname=clicked_doc)
         my_userid = User.objects.get(pk=request.user.id)
-        my_sentto = Recipients.objects.get(id=1)
+
+        # If everything is right, this will get only one email, because I haven't tested it it with multiple emails.
+        # See admin.sending_on() how I handle this.
+        my_sentto = Recipients.objects.get(active=True)
 
         try:
             creds = get_credentials()

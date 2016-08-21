@@ -30,6 +30,7 @@ class UploadedDocsAdmin(admin.ModelAdmin):
 
 
 def sending_on(modeladmin, request, queryset):
+    Recipients.objects.update(active=False)
     queryset.update(active=True)
 
 

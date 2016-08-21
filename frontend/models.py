@@ -12,9 +12,6 @@ class Recipients(models.Model):
         verbose_name = "Recipient"
         verbose_name_plural = "Recipients"
 
-    def __str__(self):
-        self.email
-
 
 class PostNameNum(models.Model):
     id = models.AutoField(primary_key=True)
