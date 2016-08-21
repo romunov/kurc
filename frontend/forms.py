@@ -3,6 +3,7 @@ from django import forms
 from django.contrib.auth.models import User
 from frontend.models import UserAddress, UploadedDocs
 
+
 class BasicUserSettingsForm(forms.ModelForm):
     class Meta:
         model = User

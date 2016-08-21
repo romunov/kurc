@@ -5,7 +5,15 @@ from frontend.misc_functions import validate_file_extension
 
 class Recipients(models.Model):
     id = models.AutoField(primary_key=True)
-    email = models.CharField(max_length=80)
+    email = models.EmailField(max_length=80)
+    active = models.BooleanField()
+
+    class Meta:
+        verbose_name = "Recipient"
+        verbose_name_plural = "Recipients"
+
+    def __str__(self):
+        self.email
 
 
 class PostNameNum(models.Model):
@@ -30,7 +38,7 @@ class Docs(models.Model):
 
     class Meta:
         verbose_name = 'Document'
-        verbose_name_plural = 'List of documents'
+        verbose_name_plural = 'Documents'
 
     # Added this because it changes how entries are displayed in the Admin site.
     def __str__(self):
