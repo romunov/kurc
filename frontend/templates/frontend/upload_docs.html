@@ -12,7 +12,10 @@
             </div>
             {% endfor %}
             {% endif %}
-            <p>Priporočamo, da datoteko poimenujete po št. zadeve, npr. <code>090-2016/01.pdf</code>.</p>
+            <p>V kolikor vam je organ odgovoril pozitivno in ste prejeli dokument, ga prosim posredujte preko te spletne
+                strani. Priporočamo, da datoteko poimenujete po št. zadeve, npr. <code>090-2016/01.pdf</code>. V spodnji
+                formular zapišite številko zadeve in pripnite datoteko, nato pa pritisnite <code>Pošlji dokument.</code>
+            </p>
             <form class='form-horizontal' action="{% url 'upload_file' %}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="form-group">
@@ -51,14 +54,14 @@
                 <thead>
                 <tr>
                     <th>Dokument</th>
-                    <th>Poslano dne</th>
+                    <th>Poslano</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for doc in all_docs %}
                 <tr>
                     <td><a href="{{ doc.id }}" target="_blank">{{ doc.docname }}</a></td>
-                    <td>{{ doc.doctime }}</td>
+                    <td>{{ doc.doctime|date:"d.n.Y @ H:i:s" }}</td>
                 </tr>
                 {% endfor %}
             </table>

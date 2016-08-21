@@ -69,7 +69,7 @@
                     {% for doc in user_docs %}
                     <tr>
                         <td>{{ doc.docid.docname }}</td>
-                        <td>{{ doc.datumtime }}</td>
+                        <td>{{ doc.datumtime|date:"d.n.Y @ H:i:s" }}</td>
                     </tr>
                     {% endfor %}
                     </tbody>

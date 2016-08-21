@@ -52,7 +52,7 @@
                         <td>{{ doc.docid.docname }}</td>
                         <!-- <td>{{ doc.docid.doccount }}</td> -->
                         <td>{{ doc.userid.username }}</td>
-                        <td>{{ doc.datumtime }}</td>
+                        <td>{{ doc.datumtime|date:"d.n.Y @ H:i:s" }}</td>
                     </tr>
                     {% endfor %}
                     </tbody>
@@ -63,7 +63,7 @@
 
     <div class="row">
         <div class="col-lg-8 col-lg-offset-2">
-            <h3><strong>Zgodovina pošiljanja</strong></h3>
+            <h3><strong>Zgodovina prejetih dokumentov</strong></h3>
             <table id="table_id_upload" class="table display">
                 <thead>
                 <tr>
@@ -77,7 +77,7 @@
                 <tr>
                     <td><a href="{{ doc.id }}" target="_blank">{{ doc.docname }}</a></td>
                     <td>{{ doc.docuser }}</td>
-                    <td>{{ doc.doctime }}</td>
+                    <td>{{ doc.doctime|date:"d.n.Y @ H:i:s" }}</td>
                 </tr>
                 {% endfor %}
                 </tbody>
