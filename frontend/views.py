@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from django.template.context import RequestContext
 from django.contrib import auth, messages
 from django.db.models import F
 from django.http import HttpResponse
@@ -84,10 +83,6 @@ def index(request):
         a_docs = Docs.objects.exclude(id__in=u_docs_vals).order_by('-docname')[:10]
         return render(request, 'frontend/dokumenti.html',
                       {'doc_list': a_docs, 'user_docs': u_docs, 'sending_error': sending_error})
-
-
-# def welcome(request):
-#     return render(request, 'frontend/login.html')
 
 
 def settings(request):
