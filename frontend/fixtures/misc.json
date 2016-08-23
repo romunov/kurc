@@ -1,9 +1,0 @@
-[
-  {
-    "model": "frontend.Recipients",
-    "pk": 1,
-    "fields": {
-      "email": "roman.lustrik@biolitika.si"
-    }
-  }
-]
