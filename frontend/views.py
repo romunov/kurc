@@ -71,12 +71,9 @@ def upload_file(request):
 
 
 def index(request):
-    context = RequestContext(request,
-                             {'request': request,
-                              'user': request.user})
 
     if request.user.is_anonymous():
-        return render(request, 'frontend/login.html', context_instance=context)
+        return render(request, template_name='frontend/login.html')
     else:
         if request.user.last_login is None:
             render(request, 'frontend/nastavitve.html')
@@ -87,11 +84,10 @@ def index(request):
         a_docs = Docs.objects.exclude(id__in=u_docs_vals).order_by('-docname')[:10]
         return render(request, 'frontend/dokumenti.html',
                       {'doc_list': a_docs, 'user_docs': u_docs, 'sending_error': sending_error})
-        # return render(request, 'frontend/login.html')
 
 
-def welcome(request):
-    return render(request, 'frontend/login.html')
+# def welcome(request):
+#     return render(request, 'frontend/login.html')
 
 
 def settings(request):
