@@ -3,6 +3,8 @@
 # exit on first nonzero exit code
 set -e
 
+rm -rf venv
+
 virtualenv -p python3 venv
 
 . venv/bin/activate
