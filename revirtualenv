@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# exit on first nonzero exit code
+set -e
+
+virtualenv -p python3 venv
+
+. venv/bin/activate
+
+pip install -r requirements.txt
+
+
