@@ -40,21 +40,21 @@ def upload_file(request):
 
     # https://amatellanes.wordpress.com/2013/11/05/dropzonejs-django-how-to-build-a-file-upload-form/
     if request.method == "POST":
-        form = UploadDocFileForm(request.POST, request.FILES)
-        if form.is_valid():
-            for file in request.FILES.iterateitems():
-                newdoc = UploadedDocs(docname=request.POST['docname'],
-                                      docfile=file,
-                                      docuser=User.objects.get(pk=request.user.id),
-                                      doctime=timezone.now())
-                newdoc.save()
-                messages.success(request,
-                                 "Dokument %s uspešno prejet." % request.POST['docname'])
-                form = UploadDocFileForm()
-        else:
+        try:
+
+            newdoc = UploadedDocs(docname=request.POST['docname'],
+                                  docfile=request.FILES['docfile'],
+                                  docuser=User.objects.get(pk=request.user.id),
+                                  doctime=timezone.now())
+            newdoc.save()
             messages.error(request,
-                           'Neveljaven vnos',
+                           'Nekaj je šlo narobe.',
                            extra_tags="danger")
+            form = UploadDocFileForm()
+        except:
+            messages.error(request, "Nekaj je šlo narobe pri pošiljanju dokumenta %s" % request.POST['docname'])
+            form = UploadDocFileForm()
+
 
     else:
         form = UploadDocFileForm()
