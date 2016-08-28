@@ -2,6 +2,10 @@
 {% load staticfiles %}
 
 {% block content %}
+<!-- Dropzone -->
+<link href="{% static 'frontend/css/dropzone.css' %}" type="text/css" rel="stylesheet"/>
+<script src="{% static 'frontend/js/dropzone.js' %}"></script>
+
 <div class="container">
     <div class="row">
         <div class="col-lg-8 col-lg-offset-2">
@@ -16,7 +20,8 @@
                 strani. Priporočamo, da datoteko poimenujete po št. zadeve, npr. <code>090-2016/01.pdf</code>. V spodnji
                 formular zapišite številko zadeve in pripnite datoteko, nato pa pritisnite <code>Pošlji dokument.</code>
             </p>
-            <form class='form-horizontal' action="{% url 'upload_file' %}" method="post" enctype="multipart/form-data">
+            # TODO: tale form ne dela
+            <form id="uploadform" class="dropzone" action="{% url 'upload_file' %}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="form-group">
                     {{ my_form.docname.errors }}
@@ -26,19 +31,36 @@
                         {{ my_form.docname }}
                     </div>
                 </div>
-                <br/>
-                <label for="{{ my_form.docname.id_for_label }}"
-                       class="col-sm-3 control-label">Pripni datoteko:</label>
-                <div class="col-sm-5">
-                    {{ my_form.docfile }}
-                </div>
-                <br/>
-                <br/>
-                <button type="submit" class="btn btn-default btn-lg btn-primary center-block btn-block"
-                        data-toggle="popup" data-placement="right"
-                        title="Dokument pošlji na strežnik.">Pošlji dokument
-                </button>
             </form>
+            <!-- http://stackoverflow.com/questions/7020659/submit-form-using-a-button-outside-the-form-tag -->
+            <button type="submit" class="btn btn-default btn-lg btn-primary center-block btn-block"
+                    data-toggle="popup" data-placement="right" form="uploadform" id="dropzonesubmitbutton"
+                    title="Dokument pošlji na strežnik.">Pošlji dokument</button>
+
+            <script type="text/javascript">
+            Dropzone.options.myDropzone = {
+
+                // Prevents Dropzone from uploading dropped files immediately
+                autoProcessQueue : false,
+
+                init : function() {
+                    var submitButton = document.querySelector("#dropzonesubmitbutton")
+                    myDropzone = this;
+
+                    submitButton.addEventListener("click", function() {
+                        myDropzone.processQueue();
+                        // Tell Dropzone to process all queued files.
+                    });
+
+                    // You might want to show the submit button only when
+                    // files are dropped here:
+                    this.on("addedfile", function() {
+                        // Show submit button here and/or inform user to click it.
+                    });
+
+                }
+            };
+        </script>
         </div>
         <div class="col-lg-8 col-lg-offset-2">
             <h3><strong>Dokumenti, ki so na voljo
