@@ -20,7 +20,6 @@
                 strani. Priporočamo, da datoteko poimenujete po št. zadeve, npr. <code>090-2016/01.pdf</code>. V spodnji
                 formular zapišite številko zadeve in pripnite datoteko, nato pa pritisnite <code>Pošlji dokument.</code>
             </p>
-            # TODO: tale form ne dela
             <form id="uploadform" class="dropzone" action="{% url 'upload_file' %}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="form-group">
