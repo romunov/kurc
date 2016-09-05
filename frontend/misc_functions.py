@@ -3,7 +3,7 @@ import os
 import oauth2client
 from oauth2client import client
 from oauth2client import tools
-from kurc.settings import CLIENT_SECRET_FILE, SCOPES, APPLICATION_NAME
+from kurc.top_secrets import CLIENT_SECRET_FILE, SCOPES, APPLICATION_NAME
 from django.core.exceptions import ValidationError
 
 
