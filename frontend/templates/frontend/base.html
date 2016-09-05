@@ -51,9 +51,7 @@
                 {% endif %}
             </ul>
             <ul class="nav navbar-nav">
-                {% if user and user.is_staff %}
                 <li><a href="/upload"><span class="glyphicon glyphicon-saved"></span> Dokumenti</a></li>
-                {% endif %}
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% if user and not user.is_anonymous %}
