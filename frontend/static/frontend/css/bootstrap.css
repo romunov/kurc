@@ -2443,7 +2443,7 @@ table th[class*="col-"] {
 }
 .table-responsive {
   min-height: .01%;
-  overflow-x: auto;
+  overflow-x: hidden;
 }
 @media screen and (max-width: 767px) {
   .table-responsive {
@@ -6823,19 +6823,4 @@ body > .container {
 	font-weight: 300;
 	font-style: italic;
 	margin: 5px;
-}
-
-
-/* table overflow fix?
--------------------------------------------------- */
-
-.table {
-    table-layout:fixed;
-}
-
-.table td {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-
 }
