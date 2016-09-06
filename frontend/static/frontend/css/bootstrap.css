@@ -6824,3 +6824,18 @@ body > .container {
 	font-style: italic;
 	margin: 5px;
 }
+
+
+/* table overflow fix?
+-------------------------------------------------- */
+
+.table {
+    table-layout:fixed;
+}
+
+.table td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+}
