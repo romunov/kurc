@@ -10,6 +10,11 @@
     {% load staticfiles %}
     <!-- this is python/django -->
 
+    <!-- favicon -->
+    <link rel="shortcut icon" href="{% static 'frontend/images/favicon1.ico' %}" type="image/x-icon">
+    <link rel="icon" href="{% static 'frontend/images/favicon1.ico' %}" type="image/x-icon">
+    <!-- favicon -->
+
     <!-- Bootstrap -->
     <link href="{% static 'frontend/css/bootstrap.css' %}" rel="stylesheet">
 
@@ -24,7 +29,7 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
     <!-- DataTable https://datatables.net/manual/installation -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs-3.3.6/dt-1.10.12/datatables.min.css"/>
+    <!--<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs-3.3.6/dt-1.10.12/datatables.min.css"/>-->
 </head>
 <body>
 
@@ -36,7 +41,7 @@
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#topFixedNavbar1"
                     aria-expanded="false"><span class="sr-only">Toggle navigation</span><span
                     class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
-            <a class="navbar-brand" href="/welcome"> <img src="{% static 'frontend/images/Kurc, secondary, logo.png' %}"
+            <a class="navbar-brand" href="/welcome"> <img src="{% static 'frontend/images/Kurc, secondary, neg, logo.png' %}"
                                                           alt="logo" width="107" height="30"></span></a></div>
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="topFixedNavbar1">
@@ -51,9 +56,7 @@
                 {% endif %}
             </ul>
             <ul class="nav navbar-nav">
-                {% if user and user.is_staff %}
                 <li><a href="/upload"><span class="glyphicon glyphicon-saved"></span> Dokumenti</a></li>
-                {% endif %}
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% if user and not user.is_anonymous %}

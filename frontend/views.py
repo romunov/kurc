@@ -42,17 +42,16 @@ def upload_file(request):
     if request.method == "POST":
         try:
 
-            newdoc = UploadedDocs(docname=request.POST['docname'],
+            newdoc = UploadedDocs(docname=request.FILES['docfile'].name,
                                   docfile=request.FILES['docfile'],
                                   docuser=User.objects.get(pk=request.user.id),
                                   doctime=timezone.now())
             newdoc.save()
-            messages.error(request,
-                           'Nekaj je šlo narobe.',
-                           extra_tags="danger")
+
+            messages.success(request, "Uspešno poslano.")
             form = UploadDocFileForm()
         except:
-            messages.error(request, "Nekaj je šlo narobe pri pošiljanju dokumenta %s" % request.POST['docname'])
+            messages.error(request, "Nekaj je šlo narobe pri pošiljanju dokumenta %s" % request.FILES['docfile'].name)
             form = UploadDocFileForm()
 
 

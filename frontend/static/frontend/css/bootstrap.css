@@ -2443,7 +2443,7 @@ table th[class*="col-"] {
 }
 .table-responsive {
   min-height: .01%;
-  overflow-x: auto;
+  overflow-x: hidden;
 }
 @media screen and (max-width: 767px) {
   .table-responsive {
@@ -4728,7 +4728,7 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
   padding: 6px 12px;
   margin-left: -1px;
   line-height: 1.42857143;
-  color: #337ab7;
+  color: #333;
   text-decoration: none;
   background-color: #fff;
   border: 1px solid #ddd;
@@ -4749,7 +4749,7 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
 .pagination > li > a:focus,
 .pagination > li > span:focus {
   z-index: 2;
-  color: #23527c;
+  color: #555;
   background-color: #eee;
   border-color: #ddd;
 }
@@ -4762,8 +4762,8 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
   z-index: 3;
   color: #fff;
   cursor: default;
-  background-color: #337ab7;
-  border-color: #337ab7;
+  background-color: #555;
+  border-color: #000;
 }
 .pagination > .disabled > span,
 .pagination > .disabled > span:hover,
@@ -4963,8 +4963,8 @@ a.badge:focus {
   padding-top: 30px;
   padding-bottom: 30px;
   margin-bottom: 30px;
-  color: inherit;
-  background-color: #eee;
+  color: #fff;
+  background-color: #414042;
 }
 .jumbotron h1,
 .jumbotron .h1 {
@@ -4982,7 +4982,7 @@ a.badge:focus {
 .container-fluid .jumbotron {
   padding-right: 15px;
   padding-left: 15px;
-  border-radius: 6px;
+  border-radius: 25px;
 }
 .jumbotron .container {
   max-width: 100%;
