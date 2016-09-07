@@ -2,7 +2,7 @@ from __future__ import print_function
 import os
 import oauth2client
 from oauth2client import client
-from oauth2client.tools import run_flow
+from oauth2client import tools
 from kurc.top_secrets import CLIENT_SECRET_FILE, SCOPES, APPLICATION_NAME
 from django.core.exceptions import ValidationError
 
@@ -31,7 +31,7 @@ def get_credentials():
     if not credentials or credentials.invalid:
         flow = client.flow_from_clientsecrets(CLIENT_SECRET_FILE, SCOPES)
         flow.user_agent = APPLICATION_NAME
-        credentials = run_flow(flow, store)
+        credentials = tools.run(flow, store)
     return credentials
 
 

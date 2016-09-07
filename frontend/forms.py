@@ -28,7 +28,6 @@ class UserAddressSettingsForm(forms.ModelForm):
 
 class UploadDocFileForm(forms.ModelForm):
     widgets = {
-        'docname': forms.TextInput(attrs={'class': 'form-control'}),
         'docfile': forms.ClearableFileInput()  # limit file size in Apache
     }
 
