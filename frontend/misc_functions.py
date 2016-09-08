@@ -7,10 +7,8 @@ from kurc.top_secrets import CLIENT_SECRET_FILE, SCOPES, APPLICATION_NAME
 from django.core.exceptions import ValidationError
 
 
-# If modifying these scopes, delete your previously saved credentials
-# at ~/.credentials/gmail-python-quickstart.json
 # https://developers.google.com/gmail/api/guides/sending
-# TODO: https://developers.google.com/gmail/api/quickstart/python
+# https://developers.google.com/gmail/api/quickstart/python
 def get_credentials():
     """Gets valid user credentials from storage.
 
@@ -20,6 +18,13 @@ def get_credentials():
     Returns:
         Credentials, the obtained credential.
     """
+
+    try:
+        import argparse
+        flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
+    except ImportError:
+        flags = None
+
     home_dir = os.path.expanduser('~')
     credential_dir = os.path.join(home_dir, '.credentials')
     if not os.path.exists(credential_dir):
@@ -32,7 +37,10 @@ def get_credentials():
     if not credentials or credentials.invalid:
         flow = client.flow_from_clientsecrets(CLIENT_SECRET_FILE, SCOPES)
         flow.user_agent = APPLICATION_NAME
-        credentials = tools.run_flow(flow, store, flags)
+        if flags:
+            credentials = tools.run_flow(flow, store, flags)
+        else: # Needed only for compatibility with Python 2.6
+            credentials = tools.run(flow, store)
     return credentials
 
 
