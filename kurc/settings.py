@@ -103,11 +103,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
-STATIC_URL = None
-STATIC_ROOT = '/home/romunov/kurc/static'
-STATICFILES_DIRS = (
-    ('/home/romunov/kurc/static'),
-)
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 LOGIN_URL = '/login'
 LOGIN_REDIRECT_URL = '/docs'
