@@ -105,6 +105,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = '/home/romunov/kurc/static'
+STATICFILES_DIRS = (
+    ('/home/romunov/kurc/static'),
+)
 
 LOGIN_URL = '/login'
 LOGIN_REDIRECT_URL = '/docs'
