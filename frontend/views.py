@@ -199,7 +199,7 @@ def docs(request):
 
         try:
             creds = get_credentials()
-            http = creds.authorize(Http())
+            http = creds.authorize(httplib2.Http())
             service = discovery.build('gmail', 'v1', http=http)
 
             # Create message container - the correct MIME type is multipart/alternative.
