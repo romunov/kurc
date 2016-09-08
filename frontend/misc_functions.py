@@ -10,6 +10,7 @@ from django.core.exceptions import ValidationError
 # If modifying these scopes, delete your previously saved credentials
 # at ~/.credentials/gmail-python-quickstart.json
 # https://developers.google.com/gmail/api/guides/sending
+# TODO: https://developers.google.com/gmail/api/quickstart/python
 def get_credentials():
     """Gets valid user credentials from storage.
 
@@ -31,7 +32,6 @@ def get_credentials():
     if not credentials or credentials.invalid:
         flow = client.flow_from_clientsecrets(CLIENT_SECRET_FILE, SCOPES)
         flow.user_agent = APPLICATION_NAME
-        credentials = tools.run(flow, store)
     return credentials
 
 
