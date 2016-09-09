@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.utils import timezone
 from .misc_functions import get_credentials
-from httplib2 import Http
+import httplib2
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from base64 import urlsafe_b64encode

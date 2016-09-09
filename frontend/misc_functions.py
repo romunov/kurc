@@ -1,7 +1,6 @@
 from __future__ import print_function
 import os
 import oauth2client
-import httplib2
 from oauth2client import client
 from oauth2client import tools
 from kurc.top_secrets import CLIENT_SECRET_FILE, SCOPES, APPLICATION_NAME
