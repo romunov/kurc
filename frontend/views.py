@@ -168,9 +168,9 @@ def docs(request):
     if request.user.last_login is None:
         passto = 'First time logger.'
 
-    sadd = UserAddress.objects.get(pk=request.user.id)
-    if sadd.DoesNotExist:
-        passto = 'No address.'
+    # sadd = UserAddress.objects.get(pk=request.user.id)
+    # if sadd.DoesNotExist:
+    #     passto = 'No address.'
 
     # Initiate some objects and gather data.
     sending_error = None
