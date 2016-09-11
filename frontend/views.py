@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib import auth, messages
 from django.db.models import F
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from .forms import UserAddressSettingsForm, BasicUserSettingsForm, UploadDocFileForm
 from .models import UserAddress, Docs, Activity, Recipients, UploadedDocs
 from django.contrib.auth.models import User
@@ -14,11 +14,16 @@ from base64 import urlsafe_b64encode
 from urllib.error import HTTPError
 from .misc_functions import create_html_string
 from os import path
-from apiclient import  discovery
+from apiclient import discovery
 from oauth2client.contrib.django_orm import Storage
 from oauth2client import client
-from oauth2client import tools
-from kurc.top_secrets import CLIENT_SECRET_FILE_GMAIL, SOCIAL_AUTH_GMAIL_SCOPES, APPLICATION_NAME
+from kurc.top_secrets import CLIENT_SECRET_FILE_GMAIL, SOCIAL_AUTH_GMAIL_SCOPES
+from oauth2client.contrib import xsrfutil
+
+flow = client.flow_from_clientsecrets(
+    CLIENT_SECRET_FILE_GMAIL,
+    scope=SOCIAL_AUTH_GMAIL_SCOPES,
+    redirect_uri='http://localhost:8000/oauth2callback')
 
 
 def view_file(request, doc_id):
@@ -201,17 +206,15 @@ def docs(request):
 
         try:
             storage = Storage(UserAddress, 'id', request.user, 'credentials')
-            creds = storage.get()
-            flags = tools.argparser.parse_args([])
-
-            if not creds or creds.invalid:
-                flow = client.flow_from_clientsecrets(filename=CLIENT_SECRET_FILE_GMAIL,
-                                                      scope=SOCIAL_AUTH_GMAIL_SCOPES)
-                flow.user_agent = APPLICATION_NAME
-                creds = tools.run_flow(flow, storage, flags)
-
-            http = creds.authorize(httplib2.Http())
-            service = discovery.build('gmail', 'v1', http=http)
+            credential = storage.get()
+            if credential is None or credential.invalid == True:
+                flow.params['state'] = xsrfutil.generate_token(settings.SECRET_KEY,
+                                                               request.user)
+                authorize_url = flow.step1_get_authorize_url()
+                return HttpResponseRedirect(authorize_url)
+            else:
+                http = credential.authorize(httplib2.Http())
+                service = discovery.build('gmail', 'v1', http=http)
 
             # Create message container - the correct MIME type is multipart/alternative.
             # https://docs.python.org/2.7/library/email-examples.html?highlight=mimemultipart
