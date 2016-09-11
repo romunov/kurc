@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from frontend.misc_functions import validate_file_extension
+from oauth2client.contrib.django_orm import CredentialsField
 
 
 class Recipients(models.Model):
@@ -13,18 +14,12 @@ class Recipients(models.Model):
         verbose_name_plural = "Recipients"
 
 
-class PostNameNum(models.Model):
-    id = models.AutoField(primary_key=True)
-    post_number = models.IntegerField()
-    post_name = models.CharField(max_length=80)
-    country = models.CharField(max_length=10)
-
-
 class UserAddress(models.Model):
     id = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     street = models.CharField(max_length=80, default="", blank=True)
     post_name = models.CharField(max_length=80, default="", blank=True)
     post_number = models.IntegerField(default=None, blank=True, null=True)
+    credentials = CredentialsField()
 
 
 class Docs(models.Model):
