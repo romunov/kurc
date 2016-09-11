@@ -24,7 +24,7 @@ from oauth2client.contrib import xsrfutil
 flow = client.flow_from_clientsecrets(
     CLIENT_SECRET_FILE_GMAIL,
     scope=SOCIAL_AUTH_GMAIL_SCOPES,
-    redirect_uri='http://localhost:8000/oauth2callback')
+    redirect_uri='http://kurc.biolitika.si/oauth2callback')
 
 
 def view_file(request, doc_id):
