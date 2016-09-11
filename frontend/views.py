@@ -1,7 +1,8 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.contrib import auth, messages
 from django.db.models import F
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
 from .forms import UserAddressSettingsForm, BasicUserSettingsForm, UploadDocFileForm
 from .models import UserAddress, Docs, Activity, Recipients, UploadedDocs
 from django.contrib.auth.models import User
@@ -205,6 +206,7 @@ def docs(request):
         my_sentto = Recipients.objects.get(active=True)
 
         try:
+            # https://github.com/google/google-api-python-client/blob/master/samples/django_sample/plus/views.py
             storage = Storage(UserAddress, 'id', request.user, 'credentials')
             credential = storage.get()
             if credential is None or credential.invalid is True:
@@ -266,6 +268,17 @@ def docs(request):
     return render(request, 'frontend/dokumenti.html',
                   {'doc_list': a_docs, 'user_docs': u_docs, 'sending_error': sending_error,
                    'passto': passto})
+
+
+@login_required
+def auth_return(request):
+    if not xsrfutil.validate_token(SOCIAL_AUTH_GMAIL_KEY, request.REQUEST['state'], request.user):
+        return HttpResponseBadRequest()
+
+    credential = flow.step2_exchange(request.REQUEST)
+    storage = Storage(UserAddress, 'id', request.user, 'credential')
+    storage.put(credential)
+    return HttpResponseRedirect("/")
 
 
 def stats(request):
