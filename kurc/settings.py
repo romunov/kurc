@@ -24,13 +24,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'uploaded')
 MEDIA_URL = '/uploaded/'
 
 INSTALLED_APPS = [
-    'social.apps.django_app.default',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'social.apps.django_app.default',
     'frontend',
 ]
 
@@ -58,6 +58,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social.apps.django_app.context_processors.backends',
+                'social.apps.django_app.context_processors.login_redirect',
             ],
         },
     },
@@ -69,8 +71,14 @@ WSGI_APPLICATION = 'kurc.wsgi.application'
 # See https://docs.djangoproject.com/en/1.9/ref/settings/#std:setting-AUTHENTICATION_BACKENDS
 AUTHENTICATION_BACKENDS = (
     'social.backends.google.GoogleOAuth2',
-    'django.contrib.auth.backends.ModelBackend',
+    'django.contrib.auth.backends.ModelBackend'
 )
+
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/docs'
+SOCIAL_AUTH_NEW_USER_REDIRECT_URL = '/settings'
+SOCIAL_AUTH_INACTIVE_USER_URL = '/benchwarmer'  # TODO: add this for users which have been inactivated
+SOCIAL_AUTH_SESSION_EXPIRATION = True
+# TODO: add disconnect http://python-social-auth.readthedocs.io/en/latest/configuration/settings.html#account-disconnection
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators

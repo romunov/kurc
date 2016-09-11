@@ -1,5 +1,6 @@
 from django.conf.urls import url
 from . import views
+from django.conf.urls import include, url
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
@@ -10,5 +11,6 @@ urlpatterns = [
     url(r'^welcome$', views.login, name="welcome"),
     url(r'^stats$', views.stats, name="stats"),
     url(r'^upload$', views.upload_file, name="upload_file"),
-    url(r'^(?P<doc_id>[0-9]{1,4}$)', views.view_file, name='view_file')
+    url(r'^(?P<doc_id>[0-9]{1,4}$)', views.view_file, name='view_file'),
+    url('', include('django.contrib.auth.urls', namespace='auth')),
 ]

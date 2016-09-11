@@ -5,17 +5,20 @@ from django.http import HttpResponse
 from .forms import UserAddressSettingsForm, BasicUserSettingsForm, UploadDocFileForm
 from .models import UserAddress, Docs, Activity, Recipients, UploadedDocs
 from django.contrib.auth.models import User
-from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
-from .misc_functions import get_credentials
 import httplib2
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from base64 import urlsafe_b64encode
-from apiclient import discovery
 from urllib.error import HTTPError
 from .misc_functions import create_html_string
 from os import path
+from apiclient import  discovery
+from oauth2client.contrib.django_orm import Storage
+from oauth2client import client
+from oauth2client import tools
+from kurc.top_secrets import CLIENT_SECRET_FILE_GMAIL, SOCIAL_AUTH_GMAIL_SCOPES, APPLICATION_NAME
 
 
 def view_file(request, doc_id):
@@ -167,7 +170,7 @@ def docs(request):
 
     try:
         sadd = UserAddress.objects.get(pk=request.user.id)
-    except UserAddress.DoesNotExist as de:
+    except sadd.DoesNotExist as de:
         passto = 'No address (error %s).' % de
 
     # Initiate some objects and gather data.
@@ -198,7 +201,17 @@ def docs(request):
         my_sentto = Recipients.objects.get(active=True)
 
         try:
-            creds = get_credentials()
+            storage = Storage(UserAddress, 'id', request.user, 'credentials')
+            creds = storage.get()
+            flags = tools.argparser.parse_args([])
+
+            if not creds or creds.invalid:
+                flow = client.flow_from_clientsecrets(CLIENT_SECRET_FILE_GMAIL,
+                                                      SOCIAL_AUTH_GMAIL_SCOPES,
+                                                      'http://127.0.0.1:8000/docs')
+                flow.user_agent = APPLICATION_NAME
+                creds = tools.run_flow(flow, storage, flags)
+
             http = creds.authorize(httplib2.Http())
             service = discovery.build('gmail', 'v1', http=http)
 
