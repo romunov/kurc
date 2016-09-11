@@ -206,8 +206,7 @@ def docs(request):
 
             if not creds or creds.invalid:
                 flow = client.flow_from_clientsecrets(filename=CLIENT_SECRET_FILE_GMAIL,
-                                                      scope=SOCIAL_AUTH_GMAIL_SCOPES,
-                                                      redirect_uri='http://kurc.biolitika.si/docs')
+                                                      scope=SOCIAL_AUTH_GMAIL_SCOPES)
                 flow.user_agent = APPLICATION_NAME
                 creds = tools.run_flow(flow, storage, flags)
 
