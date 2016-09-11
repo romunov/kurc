@@ -17,7 +17,7 @@ from os import path
 from apiclient import discovery
 from oauth2client.contrib.django_orm import Storage
 from oauth2client import client
-from kurc.top_secrets import CLIENT_SECRET_FILE_GMAIL, SOCIAL_AUTH_GMAIL_SCOPES
+from kurc.top_secrets import CLIENT_SECRET_FILE_GMAIL, SOCIAL_AUTH_GMAIL_SCOPES, SOCIAL_AUTH_GMAIL_KEY
 from oauth2client.contrib import xsrfutil
 
 flow = client.flow_from_clientsecrets(
@@ -207,8 +207,8 @@ def docs(request):
         try:
             storage = Storage(UserAddress, 'id', request.user, 'credentials')
             credential = storage.get()
-            if credential is None or credential.invalid == True:
-                flow.params['state'] = xsrfutil.generate_token(settings.SECRET_KEY,
+            if credential is None or credential.invalid is True:
+                flow.params['state'] = xsrfutil.generate_token(SOCIAL_AUTH_GMAIL_KEY,
                                                                request.user)
                 authorize_url = flow.step1_get_authorize_url()
                 return HttpResponseRedirect(authorize_url)
