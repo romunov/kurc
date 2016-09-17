@@ -24,7 +24,7 @@ from oauth2client.contrib import xsrfutil
 flow = client.flow_from_clientsecrets(
     CLIENT_SECRET_FILE,
     scope=SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPES,
-    redirect_uri='http://kurc.biolitika.si/complete/gmail/')
+    redirect_uri='http://kurc.biolitika.si/complete/google-oauth2/')
 
 
 def view_file(request, doc_id):
@@ -272,7 +272,7 @@ def docs(request):
 
 @login_required
 def auth_return(request):
-    if not xsrfutil.validate_token(SOCIAL_AUTH_GMAIL_KEY, request.REQUEST['state'], request.user):
+    if not xsrfutil.validate_token(SOCIAL_AUTH_GOOGLE_OAUTH2_KEY, request.REQUEST['state'], request.user):
         return HttpResponseBadRequest()
 
     credential = flow.step2_exchange(request.REQUEST)
