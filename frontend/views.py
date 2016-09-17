@@ -24,7 +24,7 @@ from oauth2client.contrib import xsrfutil
 flow = client.flow_from_clientsecrets(
     CLIENT_SECRET_FILE,
     scope=SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPES,
-    redirect_uri='http://kurc.biolitika.si/complete/google-oauth2/')
+    redirect_uri='http://kurc.biolitika.si/mailsendcallback/')
 
 
 def view_file(request, doc_id):
@@ -213,6 +213,7 @@ def docs(request):
                 flow.params['state'] = xsrfutil.generate_token(SOCIAL_AUTH_GOOGLE_OAUTH2_KEY,
                                                                request.user)
                 authorize_url = flow.step1_get_authorize_url()
+                print(authorize_url)
                 return HttpResponseRedirect(authorize_url)
             else:
                 http = credential.authorize(httplib2.Http())
@@ -272,11 +273,13 @@ def docs(request):
 
 @login_required
 def auth_return(request):
-    if not xsrfutil.validate_token(SOCIAL_AUTH_GOOGLE_OAUTH2_KEY, request.REQUEST['state'], request.user):
+    print(request.GET['state'])
+    if not xsrfutil.validate_token(SOCIAL_AUTH_GOOGLE_OAUTH2_KEY, request.GET['state'].encode('utf-8'), request.user):
+        print("neki neki")
         return HttpResponseBadRequest()
 
-    credential = flow.step2_exchange(request.REQUEST)
-    storage = Storage(UserAddress, 'id', request.user, 'credential')
+    credential = flow.step2_exchange(request.GET)
+    storage = Storage(UserAddress, 'id', request.user, 'credentials')
     storage.put(credential)
     return HttpResponseRedirect("/")
 
