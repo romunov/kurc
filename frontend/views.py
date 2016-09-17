@@ -18,12 +18,12 @@ from os import path
 from apiclient import discovery
 from oauth2client.contrib.django_orm import Storage
 from oauth2client import client
-from kurc.top_secrets import CLIENT_SECRET_FILE_GMAIL, SOCIAL_AUTH_GMAIL_SCOPES, SOCIAL_AUTH_GMAIL_KEY
+from kurc.top_secrets import CLIENT_SECRET_FILE, SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPES, SOCIAL_AUTH_GOOGLE_OAUTH2_KEY
 from oauth2client.contrib import xsrfutil
 
 flow = client.flow_from_clientsecrets(
-    CLIENT_SECRET_FILE_GMAIL,
-    scope=SOCIAL_AUTH_GMAIL_SCOPES,
+    CLIENT_SECRET_FILE,
+    scope=SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPES,
     redirect_uri='http://kurc.biolitika.si/complete/gmail/')
 
 
@@ -210,7 +210,7 @@ def docs(request):
             storage = Storage(UserAddress, 'id', request.user, 'credentials')
             credential = storage.get()
             if credential is None or credential.invalid is True:
-                flow.params['state'] = xsrfutil.generate_token(SOCIAL_AUTH_GMAIL_KEY,
+                flow.params['state'] = xsrfutil.generate_token(SOCIAL_AUTH_GOOGLE_OAUTH2_KEY,
                                                                request.user)
                 authorize_url = flow.step1_get_authorize_url()
                 return HttpResponseRedirect(authorize_url)

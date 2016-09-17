@@ -71,7 +71,6 @@ WSGI_APPLICATION = 'kurc.wsgi.application'
 # See https://docs.djangoproject.com/en/1.9/ref/settings/#std:setting-AUTHENTICATION_BACKENDS
 AUTHENTICATION_BACKENDS = (
     'social.backends.google.GoogleOAuth2',
-    'frontend.misc_functions.GmailOAuth2',
     'django.contrib.auth.backends.ModelBackend'
 )
 
