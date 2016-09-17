@@ -70,7 +70,8 @@ WSGI_APPLICATION = 'kurc.wsgi.application'
 # A list of authentication backends.
 # See https://docs.djangoproject.com/en/1.9/ref/settings/#std:setting-AUTHENTICATION_BACKENDS
 AUTHENTICATION_BACKENDS = (
-    'social.backends.google.GoogleOAuth2',
+    # 'social.backends.google.GoogleOAuth2',
+    'frontend.custombackends.CustomGoogleOAuth2',
     'django.contrib.auth.backends.ModelBackend'
 )
 

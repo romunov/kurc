@@ -1,7 +1,6 @@
 from __future__ import print_function
 import os
 from django.core.exceptions import ValidationError
-from social.backends.google import GoogleOAuth2
 
 
 def create_html_string(first_name, last_name, street, post_number, post_name, email, doc_name, output):
@@ -117,9 +116,3 @@ def validate_file_extension(value):
 # http://python-social-auth.readthedocs.io/en/latest/use_cases.html#multiple-scopes-per-provider
 # class GmailOAuth2(GoogleOAuth2):
 #     name = 'gmail'
-class CustomGoogleOAuth2(GoogleOAuth2):
-    def get_scope(self):
-        scope = super(CustomGoogleOAuth2, self).get_scope()
-        if self.data.get('extrascope'):
-            scope = scope + ['https://www.googleapis.com/auth/gmail.send']
-        return scope
