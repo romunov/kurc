@@ -21,11 +21,6 @@ from oauth2client import client
 from kurc.top_secrets import CLIENT_SECRET_FILE, SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPES, SOCIAL_AUTH_GOOGLE_OAUTH2_KEY
 from oauth2client.contrib import xsrfutil
 
-flow = client.flow_from_clientsecrets(
-    CLIENT_SECRET_FILE,
-    scope=SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPES,
-    redirect_uri='http://kurc.biolitika.si/mailsendcallback/')
-
 
 def view_file(request, doc_id):
     if request.user.is_anonymous:
@@ -188,9 +183,14 @@ def docs(request):
     u_docs_vals = u_docs.values('docid')
 
     # ... and exclude them from Docs
-    a_docs = Docs.objects.exclude(id__in=u_docs_vals).filter(doccount__lt=3)[1:100]
+    a_docs = Docs.objects.exclude(id__in=u_docs_vals).filter(doccount__lt=3)[0:10]
 
     if request.method == "POST":
+        flow = client.flow_from_clientsecrets(
+            CLIENT_SECRET_FILE,
+            scope=SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPES,
+            redirect_uri='http://kurc.biolitika.si/mailsendcallback/')
+
         # Get user address
         u_address = UserAddress.objects.get(pk=request.user.id)
 

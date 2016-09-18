@@ -8,8 +8,7 @@
     <!-- custom tabela iz pythona -->
     <div class="row">
         <div class="col-lg-8 col-lg-offset-2">
-            <h3><strong>Zadeve, ki še nimajo treh zahtevkov</strong></h3>
-            <h5>(prikazanih le prvih 100)</h5>
+            <h3><strong>Zadeve, ki so na voljo</strong></h3>
             <hr>
             {% if messages %}
             {% for message in messages %}
@@ -22,8 +21,7 @@
                     <table id="table_id" class="table display">
                         <thead>
                         <tr>
-                            <th>ID dokumenta <!--<span class="glyphicon glyphicon-triangle-bottom"></span>--></th>
-                            <th>N# zahtevkov</th>
+                            <th>ID dokumenta</th>
                             <th>Pošlji</th>
                         </tr>
                         </thead>
@@ -33,7 +31,6 @@
                         {% if doc.doccount < 3 %}
                         <tr>
                             <td>{{ doc.docname }}</td>
-                            <td>{{ doc.doccount }}</td>
                             <td>
                                 <button type="submit" class="btn btn-danger btn-sm btn-block" name="clickedDocName"
                                         value="{{ doc.docname }}">
