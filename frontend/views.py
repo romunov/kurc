@@ -213,7 +213,6 @@ def docs(request):
                 flow.params['state'] = xsrfutil.generate_token(SOCIAL_AUTH_GOOGLE_OAUTH2_KEY,
                                                                request.user)
                 authorize_url = flow.step1_get_authorize_url()
-                print(authorize_url)
                 return HttpResponseRedirect(authorize_url)
             else:
                 http = credential.authorize(httplib2.Http())
@@ -273,9 +272,7 @@ def docs(request):
 
 @login_required
 def auth_return(request):
-    print(request.GET['state'])
     if not xsrfutil.validate_token(SOCIAL_AUTH_GOOGLE_OAUTH2_KEY, request.GET['state'].encode('utf-8'), request.user):
-        print("neki neki")
         return HttpResponseBadRequest()
 
     credential = flow.step2_exchange(request.GET)
