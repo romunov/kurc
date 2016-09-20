@@ -128,4 +128,4 @@ CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = False
 # X_FRAME_OPTIONS = "DENY"
 # https://docs.djangoproject.com/en/1.9/ref/middleware/#http-strict-transport-security
-SECURE_HSTS_SECONDS = 0  # set to ~3600 when on HTTPS
+SECURE_HSTS_SECONDS = 3600  # set to ~3600 when on HTTPS
