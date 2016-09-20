@@ -122,9 +122,9 @@ LOGIN_REDIRECT_URL = '/docs'
 
 SECURE_CONTENT_TYPE_NOSNIFF = False
 SECURE_BROWSER_XSS_FILTER = False
-SECURE_SSL_REDIRECT = False
-SESSION_COOKIE_SECURE = False
-CSRF_COOKIE_SECURE = False
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = False
 # X_FRAME_OPTIONS = "DENY"
 # https://docs.djangoproject.com/en/1.9/ref/middleware/#http-strict-transport-security
