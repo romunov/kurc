@@ -45,7 +45,7 @@ def create_html_string(first_name, last_name, street, post_number, post_name, em
             </tr>
             <tr>
                 <td align="left" style="padding: 10px 5px 10px 5px;">
-                    Želim, da mi skladno z Zakono o dostop do informacij javnega značaja (Uradni list RS, št. 51/06 -
+                    Želim, da mi skladno z Zakonom o dostop do informacij javnega značaja (Uradni list RS, št. 51/06 -
                     uradno prečiščeno besedilo, 117/06 – ZDavP-2, 23/14, 50/14, 19/15 – odl. US in 102/15) posredujete
                     zaključni dokument zadeve številka %s. V kolikor dokument vsebuje osebne podatke, se želim z
                     dokumentom seznaniti delno, tako, da osebne podatke odstranite oz. zatemnite skladno z Zakonom o
@@ -78,7 +78,7 @@ mnz@gov.si
 
 ZADEVA: Zahteva za dostop do informacije javnega značaja, zadeve št. %s
 
-Želim, da mi skladno z Zakono o dostop do informacij javnega značaja (Uradni list RS, št. 51/06 -
+Želim, da mi skladno z Zakonom o dostop do informacij javnega značaja (Uradni list RS, št. 51/06 -
 uradno prečiščeno besedilo, 117/06 – ZDavP-2, 23/14, 50/14, 19/15 – odl. US in 102/15) posredujete
 zaključni dokument zadeve številka %s. V kolikor dokument vsebuje osebne podatke, se želim z
 dokumentom seznaniti delno, tako, da osebne podatke odstranite oz. zatemnite skladno z Zakonom o
