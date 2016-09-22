@@ -20,6 +20,7 @@ from oauth2client.contrib.django_orm import Storage
 from oauth2client import client
 from kurc.top_secrets import CLIENT_SECRET_FILE, SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPES, SOCIAL_AUTH_GOOGLE_OAUTH2_KEY
 from oauth2client.contrib import xsrfutil
+from mimetypes import MimeTypes
 
 flow = client.flow_from_clientsecrets(
     CLIENT_SECRET_FILE,
@@ -36,7 +37,7 @@ def view_file(request, doc_id):
         return render(request, 'frontend/404.html')
 
     with open(doc.docfile.path, 'rb') as pdf:
-        response = HttpResponse(pdf.read(), content_type='application/pdf')
+        response = HttpResponse(pdf.read(), content_type=MimeTypes().guess_type(pdf)[0])
         response['Content-Disposition'] = 'inline;filename=%s' % doc.docfile.name
     pdf.closed
     return response
