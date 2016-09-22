@@ -37,7 +37,7 @@ def view_file(request, doc_id):
         return render(request, 'frontend/404.html')
 
     with open(doc.docfile.path, 'rb') as pdf:
-        response = HttpResponse(pdf.read(), content_type=MimeTypes().guess_type(pdf)[0])
+        response = HttpResponse(pdf.read(), content_type=MimeTypes().guess_type(doc.docfile.path)[0])
         response['Content-Disposition'] = 'inline;filename=%s' % doc.docfile.name
     pdf.closed
     return response
