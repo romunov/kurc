@@ -27,9 +27,8 @@ flow = client.flow_from_clientsecrets(
     redirect_uri='http://kurc.biolitika.si/mailsendcallback/')
 
 
+@login_required
 def view_file(request, doc_id):
-    if request.user.is_anonymous:
-        return render(request, 'frontend/404.html')
 
     doc = UploadedDocs.objects.get(id=doc_id)
 
@@ -43,9 +42,8 @@ def view_file(request, doc_id):
     return response
 
 
+@login_required
 def upload_file(request):
-    if request.user.is_anonymous():
-        return render(request, 'frontend/404.html')
 
     # https://amatellanes.wordpress.com/2013/11/05/dropzonejs-django-how-to-build-a-file-upload-form/
     if request.method == "POST":
@@ -86,19 +84,11 @@ def index(request):
         if request.user.last_login is None:
             render(request, 'frontend/nastavitve.html')
 
-        # sending_error = None
-        # u_docs = Activity.objects.filter(userid=request.user.id).order_by('-datumtime')
-        # u_docs_vals = u_docs.values('docid')
-        # a_docs = Docs.objects.exclude(id__in=u_docs_vals).order_by('-docname')[:10]
-        # return render(request, 'frontend/dokumenti.html',
-        #               {'doc_list': a_docs, 'user_docs': u_docs, 'sending_error': sending_error})
         return docs(request)
 
 
+@login_required
 def settings(request):
-
-    if request.user.is_anonymous():
-        return render(request, 'frontend/404.html')
 
     # Prepare data to be filled into forms. User should always exist so no try/except call.
     prefill_user = User.objects.get(pk=request.user.id)
@@ -162,13 +152,10 @@ def login(request):
     return render(request, 'frontend/login.html')
 
 
+@login_required
 def docs(request):
 
     passto = None
-
-    # send away non-registered users
-    if request.user.is_anonymous():
-        return render(request, 'frontend/404.html')
 
     # Invite first timers to add their information.
     if request.user.last_login is None:
@@ -282,6 +269,7 @@ def auth_return(request):
     return HttpResponseRedirect("/")
 
 
+@login_required
 def stats(request):
     if request.user.is_staff:
         sending_error = None
