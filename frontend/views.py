@@ -26,6 +26,7 @@ flow = client.flow_from_clientsecrets(
     scope=SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPES,
     redirect_uri='http://kurc.biolitika.si/mailsendcallback/')
 
+
 def view_file(request, doc_id):
     if request.user.is_anonymous:
         return render(request, 'frontend/404.html')
@@ -85,12 +86,13 @@ def index(request):
         if request.user.last_login is None:
             render(request, 'frontend/nastavitve.html')
 
-        sending_error = None
-        u_docs = Activity.objects.filter(userid=request.user.id).order_by('-datumtime')
-        u_docs_vals = u_docs.values('docid')
-        a_docs = Docs.objects.exclude(id__in=u_docs_vals).order_by('-docname')[:10]
-        return render(request, 'frontend/dokumenti.html',
-                      {'doc_list': a_docs, 'user_docs': u_docs, 'sending_error': sending_error})
+        # sending_error = None
+        # u_docs = Activity.objects.filter(userid=request.user.id).order_by('-datumtime')
+        # u_docs_vals = u_docs.values('docid')
+        # a_docs = Docs.objects.exclude(id__in=u_docs_vals).order_by('-docname')[:10]
+        # return render(request, 'frontend/dokumenti.html',
+        #               {'doc_list': a_docs, 'user_docs': u_docs, 'sending_error': sending_error})
+        return docs(request)
 
 
 def settings(request):
@@ -101,15 +103,14 @@ def settings(request):
     # Prepare data to be filled into forms. User should always exist so no try/except call.
     prefill_user = User.objects.get(pk=request.user.id)
 
-    # In case CustomUser table is empty, instantiate a CustomUser with request.user.id user_id.
+    # In case CustomUser table is empty, instantiate a CustomUser.
     try:
-        if 'remove_personal_info' in request.POST:
-            UserAddress.objects.get(id=request.user.id).delete()
         prefill_customuser = UserAddress.objects.get(pk=request.user.id)
     except ObjectDoesNotExist:
         prefill_customuser = UserAddress(id=User(id=request.user.id))
 
     if request.method == "GET":
+
         # If CustomUser table is empty, fields will appear empty. If prefill_customuser is successful
         # at retrieving data, I expect this to be populated by values from the database.
         settings_form_user = BasicUserSettingsForm(initial={'first_name': prefill_user.first_name,
@@ -124,6 +125,8 @@ def settings(request):
         write_ok = None
 
     if request.method == "POST":
+        if any([s for s in request.POST if 'remove_personal_info' in s]):
+            UserAddress.objects.get(id=request.user.id).delete()
 
         settings_form_user = BasicUserSettingsForm(request.POST, instance=prefill_user)
         try:
@@ -146,9 +149,7 @@ def settings(request):
                    'settings_form_customuser': settings_form_customuser,
                    'write_ok': write_ok,
                    'data_user_acc': prefill_user,
-                   'data_user_add': prefill_customuser,
-                   'passto': 3,
-                   'mypost': request.POST.get('remove_personal_info')}
+                   'data_user_add': prefill_customuser}
                   )
 
 
