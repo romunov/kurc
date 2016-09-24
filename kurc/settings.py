@@ -109,9 +109,6 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.9/howto/static-files/
-
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
@@ -119,13 +116,23 @@ LOGIN_URL = '/login'
 LOGIN_REDIRECT_URL = '/docs'
 
 # https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
-
-SECURE_CONTENT_TYPE_NOSNIFF = False
-SECURE_BROWSER_XSS_FILTER = False
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-CSRF_COOKIE_HTTPONLY = False
-# X_FRAME_OPTIONS = "DENY"
 # https://docs.djangoproject.com/en/1.9/ref/middleware/#http-strict-transport-security
-SECURE_HSTS_SECONDS = 3600  # set to ~3600 when on HTTPS
+deploy = True
+
+if deploy is True:
+    SECURE_CONTENT_TYPE_NOSNIFF = False
+    SECURE_BROWSER_XSS_FILTER = False
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    CSRF_COOKIE_HTTPONLY = False
+    # X_FRAME_OPTIONS = "DENY"
+    SECURE_HSTS_SECONDS = 3600
+else:
+    SECURE_CONTENT_TYPE_NOSNIFF = False
+    SECURE_BROWSER_XSS_FILTER = False
+    SECURE_SSL_REDIRECT = False
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
+    CSRF_COOKIE_HTTPONLY = False
+    SECURE_HSTS_SECONDS = 0  # set to ~3600 when on HTTPS
