@@ -47,7 +47,7 @@
         <div class="collapse navbar-collapse" id="topFixedNavbar1">
             <ul class="nav navbar-nav">
                 {% if user and not user.is_anonymous %}
-                <li><a href="/docs"><span class="glyphicon glyphicon-comment"></span> Zahtevaj dokument</a></li>
+                <li><a href="/docs"><span class="glyphicon glyphicon-comment"></span> Pošlji zahtevek</a></li>
                 {% endif %}
             </ul>
             <ul class="nav navbar-nav">
@@ -56,7 +56,7 @@
                 {% endif %}
             </ul>
             <ul class="nav navbar-nav">
-                <li><a href="/upload"><span class="glyphicon glyphicon-saved"></span> Dokumenti</a></li>
+                <li><a href="/upload"><span class="glyphicon glyphicon-saved"></span> Prejeti dokumenti</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% if user and not user.is_anonymous %}
