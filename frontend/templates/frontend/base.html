@@ -66,6 +66,9 @@
                 <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span>
                     {{ user.get_full_name|default:user.username }} (Odjava)</a></li>
                 {% endif %}
+                {% if user and not user.is_superuser %}
+                <li><a href="/admin"><span class="glyphicon glyphicon-link"></span> Admin</a></li>
+                {% endif %}
             </ul>
         </div>
         <!-- /.navbar-collapse -->

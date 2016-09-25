@@ -1,14 +1,12 @@
 {% extends 'frontend/base.html' %}
 {% load staticfiles %}
-<!-- TODO: v bistvu bi lahko v primeru neizpolnjenih nastavitev neprikazal gumbek za pošiljanje -->
 {% block content %}
 
 {% if passto == None %}
 <div class="container">
-    <!-- custom tabela iz pythona -->
     <div class="row">
         <div class="col-lg-8 col-lg-offset-2">
-            <h3><strong>Zadeve, ki so na voljo</strong></h3>
+            <h3><strong>S klikom na kuverto zahtevaj zadevo št.:</strong></h3>
             <hr>
             {% if messages %}
             {% for message in messages %}
