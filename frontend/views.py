@@ -24,7 +24,7 @@ from mimetypes import MimeTypes
 flow = client.flow_from_clientsecrets(
     CLIENT_SECRET_FILE,
     scope=SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPES,
-    redirect_uri='http://127.0.0.1:8000/mailsendcallback/')  # 'https://kurc.biolitika.si/mailsendcallback/'
+    redirect_uri='https://kurc.biolitika.si/mailsendcallback/')  # 'http://127.0.0.1:8000/mailsendcallback/'
 
 
 @login_required
