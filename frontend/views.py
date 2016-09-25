@@ -24,7 +24,7 @@ from mimetypes import MimeTypes
 flow = client.flow_from_clientsecrets(
     CLIENT_SECRET_FILE,
     scope=SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPES,
-    redirect_uri='https://kurc.biolitika.si/mailsendcallback/')  # http://127.0.0.1:8000/mailsendcallback/
+    redirect_uri='http://127.0.0.1:8000/mailsendcallback/')  # 'https://kurc.biolitika.si/mailsendcallback/'
 
 
 @login_required
@@ -163,8 +163,8 @@ def docs(request):
         u_address = UserAddress.objects.get(pk=request.user.id)
 
         if u_address.street == "" or u_address.post_number is None or u_address.post_name == "":
-            messages.error(request, "Naslov je obvezen. Prosim izpolni manjkajoča polja.")
-
+            messages.error(request,
+                           "Naslov je obvezen. Prosim, da v Nastavitvah izpolniš manjkajoča polja in poskusiš znova.")
             return render(request, 'frontend/dokumenti.html',
                           {'doc_list': a_docs, 'user_docs': u_docs, 'sending_error': sending_error,
                            'passto': passto})
