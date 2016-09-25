@@ -6,8 +6,9 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-8 col-lg-offset-2">
-            <h3><strong>S klikom na kuverto zahtevaj zadevo št.:</strong></h3>
+            <h3><strong>Zadeve, ki so na voljo:</strong></h3>
             <hr>
+            S klikom na rdeč gumb pošlješ zahtevo za dostop do informacije javnega značaja.
             {% if messages %}
             {% for message in messages %}
             <div {% if message.tags %} class="alert alert-{{ message.tags }}" {% endif %}>{{ message }}</div>
