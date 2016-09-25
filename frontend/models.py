@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from frontend.misc_functions import validate_file_extension
 from oauth2client.contrib.django_orm import CredentialsField
+from django.db.models.signals import post_delete
+from django.dispatch.dispatcher import receiver
 
 
 class Recipients(models.Model):
@@ -57,6 +59,11 @@ class UploadedDocs(models.Model):
 
     def __str__(self):
         return self.docname
+
+
+@receiver(post_delete, sender=UploadedDocs)
+def delete_document(sender, instance, **kwargs):
+    instance.docfile.delete(False)
 
 
 class UserCredentials(models.Model):
