@@ -19,7 +19,6 @@ class UserAddress(models.Model):
     street = models.CharField(max_length=80, default="", blank=True)
     post_name = models.CharField(max_length=80, default="", blank=True)
     post_number = models.IntegerField(default=None, blank=True, null=True)
-    credentials = CredentialsField()
 
 
 class Docs(models.Model):
@@ -58,3 +57,8 @@ class UploadedDocs(models.Model):
 
     def __str__(self):
         return self.docname
+
+
+class UserCredentials(models.Model):
+    id = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    credentials = CredentialsField()

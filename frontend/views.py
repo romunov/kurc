@@ -4,9 +4,8 @@ from django.contrib import auth, messages
 from django.db.models import F
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
 from .forms import UserAddressSettingsForm, BasicUserSettingsForm, UploadDocFileForm
-from .models import UserAddress, Docs, Activity, Recipients, UploadedDocs
+from .models import UserAddress, Docs, Activity, Recipients, UploadedDocs, UserCredentials
 from django.contrib.auth.models import User
-from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
 import httplib2
 from email.mime.text import MIMEText
@@ -25,7 +24,7 @@ from mimetypes import MimeTypes
 flow = client.flow_from_clientsecrets(
     CLIENT_SECRET_FILE,
     scope=SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPES,
-    redirect_uri='https://kurc.biolitika.si/mailsendcallback/')
+    redirect_uri='https://kurc.biolitika.si/mailsendcallback/')  # http://127.0.0.1:8000/mailsendcallback/
 
 
 @login_required
@@ -93,55 +92,35 @@ def settings(request):
 
     # Prepare data to be filled into forms. User should always exist so no try/except call.
     prefill_user = User.objects.get(pk=request.user.id)
-
-    # In case CustomUser table is empty, instantiate a CustomUser.
-    try:
-        prefill_customuser = UserAddress.objects.get(pk=request.user.id)
-    except ObjectDoesNotExist:
-        prefill_customuser = UserAddress(id=User(id=request.user.id))
-
-    if request.method == "GET":
-
-        # If CustomUser table is empty, fields will appear empty. If prefill_customuser is successful
-        # at retrieving data, I expect this to be populated by values from the database.
-        settings_form_user = BasicUserSettingsForm(initial={'first_name': prefill_user.first_name,
-                                                            'last_name': prefill_user.last_name,
-                                                            'email': prefill_user.email},
-                                                   instance=prefill_user)
-
-        settings_form_customuser = UserAddressSettingsForm(initial={'street': prefill_customuser.street,
-                                                                    'post_name': prefill_customuser.post_name,
-                                                                    'post_number': prefill_customuser.post_number},
-                                                           instance=prefill_customuser)
-        write_ok = None
+    prefill_customuser, pfcu_created = UserAddress.objects.get_or_create(id=User(id=request.user.id))
 
     if request.method == "POST":
         if any([s for s in request.POST if 'remove_personal_info' in s]):
             UserAddress.objects.get(id=request.user.id).delete()
 
         settings_form_user = BasicUserSettingsForm(request.POST, instance=prefill_user)
-        try:
-            settings_form_customuser = UserAddressSettingsForm(request.POST, instance=prefill_customuser)
-        except ObjectDoesNotExist:
-            settings_form_customuser = UserAddressSettingsForm(request.POST)
+        settings_form_customuser = UserAddressSettingsForm(request.POST, instance=prefill_customuser)
 
         if settings_form_customuser.is_valid():
             settings_form_user.save()
             settings_form_customuser.save()
             write_ok = True
-
         else:
-            settings_form_user = BasicUserSettingsForm(request.POST)
-            settings_form_customuser = UserAddressSettingsForm(request.POST)
+            messages.error(request, "Naslov je obvezen. Prosim izpolni manjkajoča polja.")
             write_ok = False
+
+    else:
+        settings_form_user = BasicUserSettingsForm(instance=prefill_user)
+        settings_form_customuser = UserAddressSettingsForm(instance=prefill_customuser)
+        write_ok = None
 
     return render(request, 'frontend/nastavitve.html',
                   {'settings_form_user': settings_form_user,
                    'settings_form_customuser': settings_form_customuser,
                    'write_ok': write_ok,
                    'data_user_acc': prefill_user,
-                   'data_user_add': prefill_customuser}
-                  )
+                   'data_user_add': prefill_customuser
+                   })
 
 
 def logout(request):
@@ -183,6 +162,13 @@ def docs(request):
         # Get user address
         u_address = UserAddress.objects.get(pk=request.user.id)
 
+        if u_address.street == "" or u_address.post_number is None or u_address.post_name == "":
+            messages.error(request, "Naslov je obvezen. Prosim izpolni manjkajoča polja.")
+
+            return render(request, 'frontend/dokumenti.html',
+                          {'doc_list': a_docs, 'user_docs': u_docs, 'sending_error': sending_error,
+                           'passto': passto})
+
         # Get clicked document name.
         clicked_doc = request.POST.get('clickedDocName', '')
 
@@ -196,7 +182,7 @@ def docs(request):
 
         try:
             # https://github.com/google/google-api-python-client/blob/master/samples/django_sample/plus/views.py
-            storage = Storage(UserAddress, 'id', request.user, 'credentials')
+            storage = Storage(UserCredentials, 'id', request.user, 'credentials')
             credential = storage.get()
             if credential is None or credential.invalid is True:
                 flow.params['state'] = xsrfutil.generate_token(SOCIAL_AUTH_GOOGLE_OAUTH2_KEY,
@@ -265,7 +251,7 @@ def auth_return(request):
         return HttpResponseBadRequest()
 
     credential = flow.step2_exchange(request.GET)
-    storage = Storage(UserAddress, 'id', request.user, 'credentials')
+    storage = Storage(UserCredentials, 'id', request.user, 'credentials')
     storage.put(credential)
     return HttpResponseRedirect("/")
 
