@@ -1,14 +1,10 @@
-{% extends 'frontend/base.html' %}
-{% load staticfiles %}
-
-{% block content %}
+{% extends 'frontend/base.html' %} {% load staticfiles %} {% block content %}
 <div class="container">
     <div class="row">
         <div class="col-lg-6 col-lg-offset-3 col-md-12">
             <h2 class="text-center">Nastavitve</h2>
-            <p class="text-center">Osebne podatke hranim za potrebe podpisovanja e-mailov. Podatkov ne delim s
-                tretjimi osebami in jih hranim skladno z Zakonom o varovanju osebnih podatkov (Uradni list RS
-                94/07). Prosim, če izpolniš <strong>vsa polja</strong> in na koncu pritisneš gumb
+            <p class="text-center">Osebne podatke hranim za potrebe podpisovanja e-mailov. Podatkov ne delim s tretjimi osebami in jih hranim skladno
+                z Zakonom o varovanju osebnih podatkov (Uradni list RS 94/07). Prosim, če izpolniš <strong>vsa polja</strong>                in na koncu pritisneš gumb
                 <code>Shrani podatke</code>.</p>
             <br/>
             <form class="form-horizontal" method="post" action="/settings">
@@ -16,8 +12,7 @@
 
                 <div class="form-group">
                     {{ settings_form_user.first_name.errors }}
-                    <label for="{{ settings_form_user.first_name.id_for_label }}"
-                           class="col-sm-3 control-label">Ime:</label>
+                    <label for="{{ settings_form_user.first_name.id_for_label }}" class="col-sm-3 control-label">Ime:</label>
                     <div class="col-sm-5">
                         {{ settings_form_user.first_name }}
                     </div>
@@ -25,8 +20,7 @@
                 <div class="form-group">
                     {{ settings_form_user.last_name.errors }}
                     <div class="clearfix"></div>
-                    <label for="{{ settings_form_user.last_name.id_for_label }}"
-                           class="col-sm-3 control-label">Priimek:</label>
+                    <label for="{{ settings_form_user.last_name.id_for_label }}" class="col-sm-3 control-label">Priimek:</label>
                     <div class="col-sm-5">
                         {{ settings_form_user.last_name }}
                     </div>
@@ -51,8 +45,7 @@
                 <div class="form-group">
                     {{ settings_form_custom_user.post_name.errors }}
                     <div class="clearfix"></div>
-                    <label for="{{ settings_form_customuser.post_name.id_for_label }}"
-                           class="col-sm-3 control-label clearfix">Ime pošte:</label>
+                    <label for="{{ settings_form_customuser.post_name.id_for_label }}" class="col-sm-3 control-label clearfix">Ime pošte:</label>
                     <div class="col-sm-5">
                         {{ settings_form_customuser.post_name }}
                     </div>
@@ -72,13 +65,10 @@
                         <button type="submit" class="btn btn-success btn-lg btn-primary center-block btn-block">
                             Shranjeno
                             <span class="glyphicon glyphicon-ok" aria-hidden="true" aria-label="naprej"> </span>
-                        </button>
-                        {% else %}
-                        <button type="submit" class="btn btn-default btn-lg btn-primary center-block btn-block"
-                                data-toggle="popup" data-placement="right"
-                                title="Podatke si zapomni za pošiljanje elektronskih sporočil">Shrani podatke
-                        </button>
-                        {% endif %}
+                        </button> {% else %}
+                        <button type="submit" class="btn btn-default btn-lg btn-primary center-block btn-block" data-toggle="popup" data-placement="right"
+                            title="Podatke si zapomni za pošiljanje elektronskih sporočil">Shrani podatke
+                        </button> {% endif %}
                     </div>
                 </div>
             </form>
@@ -87,9 +77,8 @@
                 <div class="col-lg-5 col-lg-offset-3 col-md-12">
                     <form class="form-horizontal" method="post" action="/settings">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-warning btn-lg btn-primary center-block btn-block"
-                                data-toggle="popup" data-placement="right" name="remove_personal_info"
-                                title="Izbriši osebne podatke.">Izbriši osebne podatke
+                        <button type="submit" class="btn btn-warning btn-lg btn-primary center-block btn-block" data-toggle="popup" data-placement="right"
+                            name="remove_personal_info" title="Izbriši osebne podatke.">Izbriši osebne podatke
                         </button>
                     </form>
                 </div>
@@ -101,46 +90,32 @@
     <div class="row">
         <div class="col-lg-6 col-lg-offset-3 col-md-12">
             <h3>Vsebina sporočila, ki bo poslana:</h3>
-            <table align="left" border="0" cellpadding="0" cellspacing="0" width="600"
-                   style="border-collapse: collapse; font-family: sans-serif; font-size: 11pt;">
-                <tr>
-                    <td align="left" style="padding: 20px 5px 10px 5px;">
-                        {{ data_user_acc.first_name }} {{ data_user_acc.last_name }}
-                        <br> {{ data_user_add.street }}
-                        <br> {{ data_user_add.post_number }} {{ data_user_add.post_name }}
-                        <br> {{ data_user_acc.email }}
-                    </td>
-                </tr>
-                <tr>
-                    <td align="left" style="padding: 20px 5px 10px 5px;">
-                        Ministrstvo za notranje zadeve
-                        <br> Inšpektorat RS za notranje zadeve
-                        <br> Štefanova 11
-                        <br> 1000 Ljubljana
-                        <br> mnz@gov.si
-                    </td>
-                </tr>
-                <tr>
-                    <td align="left" style="padding: 10px 5px 10px 5px;">
-                        <strong>ZADEVA: Zahteva za dostop do informacije javnega značaja, zadeva [št. zadeve]</strong>
-                    </td>
-                </tr>
-                <tr>
-                    <td align="left" style="padding: 10px 5px 10px 5px;">
-                        Želim, da mi skladno z Zakonom o dostop do informacij javnega značaja (Uradni list RS, št. 51/06
-                        - uradno prečiščeno besedilo, 117/06 – ZDavP-2, 23/14, 50/14, 19/15 – odl. US in 102/15)
-                        posredujete zaključni dokument zadeve številka [št. zadeve]. V kolikor dokument vsebuje osebne
-                        podatke, se želim z dokumentom seznaniti delno, tako, da osebne podatke odstranite oz. zatemnite
-                        skladno z Zakonom o varovanju osebnih podatkov. Dokumente želim prejeti v elektronski obliki na
-                        zgoraj naveden elektronski naslov.
-                    </td>
-                </tr>
-                <tr>
-                    <td align="left" style="padding: 20px 5px 10px 5px;">
-                        {{ data_user_acc.first_name }} {{ data_user_acc.last_name }}
-                    </td>
-                </tr>
-            </table>
+            <p>
+                {{ data_user_acc.first_name }} {{ data_user_acc.last_name }}
+                <br> {{ data_user_add.street }}
+                <br> {{ data_user_add.post_number }} {{ data_user_add.post_name }}
+                <br> {{ data_user_acc.email }}
+            </p>
+            <p>
+                Ministrstvo za notranje zadeve
+                <br> Inšpektorat RS za notranje zadeve
+                <br> Štefanova 11
+                <br> 1000 Ljubljana
+                <br> mnz@gov.si
+            </p>
+            <p>
+                <strong>ZADEVA: Zahteva za dostop do informacije javnega značaja, zadeva [št. zadeve]</strong>
+            </p>
+            <p>
+                Želim, da mi skladno z Zakonom o dostop do informacij javnega značaja (Uradni list RS, št. 51/06 - uradno prečiščeno besedilo,
+                117/06 – ZDavP-2, 23/14, 50/14, 19/15 – odl. US in 102/15) posredujete zaključni dokument zadeve številka
+                [št. zadeve]. V kolikor dokument vsebuje osebne podatke, se želim z dokumentom seznaniti delno, tako, da
+                osebne podatke odstranite oz. zatemnite skladno z Zakonom o varovanju osebnih podatkov. Dokumente želim prejeti
+                v elektronski obliki na zgoraj naveden elektronski naslov.
+            </p>
+            <p>
+                {{ data_user_acc.first_name }} {{ data_user_acc.last_name }}
+            </p>
             <br/>
         </div>
     </div>
