@@ -1336,7 +1336,7 @@ mark,
   text-transform: capitalize;
 }
 .text-muted {
-  color: #a3a3a3;
+  color: #414042;
 }
 .text-primary {
   color: #337ab7;
@@ -4971,8 +4971,8 @@ a.badge:focus {
   color: inherit;
 }
 .jumbotron p {
-  margin-bottom: 15px;
-  font-size: 21px;
+  margin-bottom: 10px;
+  font-size: 18px;
   font-weight: 200;
 }
 .jumbotron > hr {
