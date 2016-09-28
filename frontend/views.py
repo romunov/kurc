@@ -20,6 +20,7 @@ from oauth2client import client
 from kurc.top_secrets import CLIENT_SECRET_FILE, SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPES, SOCIAL_AUTH_GOOGLE_OAUTH2_KEY
 from oauth2client.contrib import xsrfutil
 from mimetypes import MimeTypes
+from random import randint
 
 flow = client.flow_from_clientsecrets(
     CLIENT_SECRET_FILE,
@@ -141,10 +142,6 @@ def docs(request):
     if request.user.last_login is None:
         passto = 'First time logger.'
 
-    # sadd = UserAddress.objects.get(pk=request.user.id)
-    # if sadd.DoesNotExist:
-    #     passto = 'No address.'
-
     # Initiate some objects and gather data.
     sending_error = None
 
@@ -154,8 +151,14 @@ def docs(request):
     # Find all documents from activity...
     u_docs_vals = u_docs.values('docid')
 
-    # ... and exclude them from Docs
-    a_docs = Docs.objects.exclude(id__in=u_docs_vals).filter(doccount__lt=3)[0:10]
+    # ... and exclude them from Docs and fetch 10 random entries.
+    count = Docs.objects.all().count()
+    rand_entries = list()
+
+    for i in list(range(10)):
+        rand_entries.append(randint(1, count))
+
+    a_docs = Docs.objects.exclude(id__in=u_docs_vals).filter(id__in=rand_entries)
 
     if request.method == "POST":
 

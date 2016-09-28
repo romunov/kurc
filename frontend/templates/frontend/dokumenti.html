@@ -8,7 +8,9 @@
         <div class="col-lg-8 col-lg-offset-2">
             <h3><strong>Zadeve, ki so na voljo:</strong></h3>
             <hr>
-            S klikom na rdeč gumb pošlješ zahtevo za dostop do informacije javnega značaja.
+            S klikom na rdeč gumb pošlješ zahtevo za dostop do informacije javnega značaja. Ko je sporočilo uspešno
+            poslano se bo potrdilo izpisalo v zelenem okvirju. V kolikor dobiš napako ali pa se ne zgodi nič, osveži
+            stran in poskusi znova.
             {% if messages %}
             {% for message in messages %}
             <div {% if message.tags %} class="alert alert-{{ message.tags }}" {% endif %}>{{ message }}</div>
