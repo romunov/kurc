@@ -194,6 +194,7 @@ def docs(request):
                 return HttpResponseRedirect(authorize_url)
             else:
                 http = credential.authorize(httplib2.Http())
+                credential.refresh(http)
                 service = discovery.build('gmail', 'v1', http=http)
 
             # Create message container - the correct MIME type is multipart/alternative.
