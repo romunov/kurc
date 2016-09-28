@@ -25,7 +25,6 @@ from random import randint
 flow = client.flow_from_clientsecrets(
     CLIENT_SECRET_FILE,
     scope=SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPES,
-    approval_prompt='force',
     redirect_uri='https://kurc.biolitika.si/mailsendcallback/')  # 'http://127.0.0.1:8000/mailsendcallback/'
 
 
@@ -195,7 +194,6 @@ def docs(request):
                 return HttpResponseRedirect(authorize_url)
             else:
                 http = credential.authorize(httplib2.Http())
-                credential.refresh(http)
                 service = discovery.build('gmail', 'v1', http=http)
 
             # Create message container - the correct MIME type is multipart/alternative.
