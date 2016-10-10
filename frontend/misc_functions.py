@@ -50,7 +50,7 @@ def create_html_string(first_name, last_name, street, post_number, post_name, em
                     zaključni dokument zadeve številka %s. V kolikor dokument vsebuje osebne podatke, se želim z
                     dokumentom seznaniti delno, tako, da osebne podatke odstranite oz. zatemnite skladno z Zakonom o
                     varovanju osebnih podatkov. Dokumente želim prejeti v elektronski obliki na zgoraj naveden
-                    elektronski naslov.
+                    elektronski naslov. Informacijo bom uporabljal v zasebne namene.
                 </td>
             </tr>
             <tr>
@@ -83,7 +83,7 @@ uradno prečiščeno besedilo, 117/06 – ZDavP-2, 23/14, 50/14, 19/15 – odl. 
 zaključni dokument zadeve številka %s. V kolikor dokument vsebuje osebne podatke, se želim z
 dokumentom seznaniti delno, tako, da osebne podatke odstranite oz. zatemnite skladno z Zakonom o
 varovanju osebnih podatkov. Dokumente želim prejeti v elektronski obliki na zgoraj naveden
-elektronski naslov.
+elektronski naslov. Informacijo bom uporabljal v zasebne namene.
 
 
 %s %s
