@@ -88,6 +88,14 @@ def index(request):
         return docs(request)
 
 
+def help(request):
+
+    if request.user.is_anonymous():
+        return render(request, template_name='frontend/404.html')
+    else:
+        return render(request, 'frontend/navodila.html')
+
+
 @login_required
 def settings(request):
 
