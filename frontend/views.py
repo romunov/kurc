@@ -21,12 +21,14 @@ from kurc.top_secrets import CLIENT_SECRET_FILE, SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE
 from oauth2client.contrib import xsrfutil
 from mimetypes import MimeTypes
 from random import randint
+from datetime import *
+from kurc.settings import SECURE_HSTS_SECONDS
 
 flow = client.flow_from_clientsecrets(
     CLIENT_SECRET_FILE,
     scope=SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPES,
-    redirect_uri='https://kurc.biolitika.si/mailsendcallback/')  # 'http://127.0.0.1:8000/mailsendcallback/'
-
+    # redirect_uri='https://kurc.biolitika.si/mailsendcallback/')  # 'http://127.0.0.1:8000/mailsendcallback/'
+    redirect_uri='http://127.0.0.1:8000/mailsendcallback/')
 
 @login_required
 def view_file(request, doc_id):
@@ -195,6 +197,7 @@ def docs(request):
             # https://github.com/google/google-api-python-client/blob/master/samples/django_sample/plus/views.py
             storage = Storage(UserCredentials, 'id', request.user, 'credentials')
             credential = storage.get()
+
             if credential is None or credential.invalid is True:
                 flow.params['state'] = xsrfutil.generate_token(SOCIAL_AUTH_GOOGLE_OAUTH2_KEY,
                                                                request.user)
@@ -202,6 +205,11 @@ def docs(request):
                 return HttpResponseRedirect(authorize_url)
             else:
                 http = credential.authorize(httplib2.Http())
+
+                # refresh token if expired
+                if (credential.token_expiry - datetime.utcnow()) < timedelta(seconds=SECURE_HSTS_SECONDS):
+                    credential.refresh(httplib2.Http())
+
                 service = discovery.build('gmail', 'v1', http=http)
 
             # Create message container - the correct MIME type is multipart/alternative.
