@@ -135,4 +135,4 @@ else:
     SESSION_COOKIE_SECURE = False
     CSRF_COOKIE_SECURE = False
     CSRF_COOKIE_HTTPONLY = False
-    SECURE_HSTS_SECONDS = 0  # set to ~3600 when on HTTPS
+    SECURE_HSTS_SECONDS = 20  # set to ~3600 when on HTTPS

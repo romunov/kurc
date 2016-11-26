@@ -21,14 +21,13 @@ from kurc.top_secrets import CLIENT_SECRET_FILE, SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE
 from oauth2client.contrib import xsrfutil
 from mimetypes import MimeTypes
 from random import randint
-from datetime import *
-from kurc.settings import SECURE_HSTS_SECONDS
 
 flow = client.flow_from_clientsecrets(
     CLIENT_SECRET_FILE,
     scope=SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPES,
-    # redirect_uri='https://kurc.biolitika.si/mailsendcallback/')  # 'http://127.0.0.1:8000/mailsendcallback/'
-    redirect_uri='http://127.0.0.1:8000/mailsendcallback/')
+    redirect_uri='https://kurc.biolitika.si/mailsendcallback/')
+    # redirect_uri='http://127.0.0.1:8000/mailsendcallback/')
+
 
 @login_required
 def view_file(request, doc_id):
@@ -63,7 +62,6 @@ def upload_file(request):
         except:
             messages.error(request, "Nekaj je šlo narobe pri pošiljanju dokumenta %s" % request.FILES['docfile'].name)
             form = UploadDocFileForm()
-
 
     else:
         form = UploadDocFileForm()
@@ -163,10 +161,7 @@ def docs(request):
 
     # ... and exclude them from Docs and fetch 10 random entries.
     count = Docs.objects.all().count()
-    rand_entries = list()
-
-    for i in list(range(10)):
-        rand_entries.append(randint(1, count))
+    rand_entries = [randint(1, count) for _ in list(range(10))]
 
     a_docs = Docs.objects.exclude(id__in=u_docs_vals).filter(id__in=rand_entries)
 
@@ -202,57 +197,60 @@ def docs(request):
                 flow.params['state'] = xsrfutil.generate_token(SOCIAL_AUTH_GOOGLE_OAUTH2_KEY,
                                                                request.user)
                 authorize_url = flow.step1_get_authorize_url()
+                messages.warning(request,
+                                 "Zahtevek št. %s zahtevan vendar je prišlo do napake. Prosim ponovi." % clicked_doc)
                 return HttpResponseRedirect(authorize_url)
             else:
                 http = credential.authorize(httplib2.Http())
 
-                # refresh token if expired
-                if (credential.token_expiry - datetime.utcnow()) < timedelta(seconds=SECURE_HSTS_SECONDS):
-                    credential.refresh(httplib2.Http())
+                # # refresh token if expired
+                # if credential.access_token_expired:
+                #     credential.refresh(http)
 
                 service = discovery.build('gmail', 'v1', http=http)
 
-            # Create message container - the correct MIME type is multipart/alternative.
-            # https://docs.python.org/2.7/library/email-examples.html?highlight=mimemultipart
-            msg = MIMEMultipart()
-            msg['Subject'] = "Zahteva za dostop do informacije javnega značaja št. %s" % clicked_doc
-            msg['From'] = '%s %s <%s>' % (my_userid.first_name, my_userid.last_name, request.user.email)
-            msg['To'] = my_sentto.email
+                # Create message container - the correct MIME type is multipart/alternative.
+                # https://docs.python.org/2.7/library/email-examples.html?highlight=mimemultipart
+                msg = MIMEMultipart()
+                msg['Subject'] = "Zahteva za dostop do informacije javnega značaja št. %s" % clicked_doc
+                msg['From'] = '%s %s <%s>' % (my_userid.first_name, my_userid.last_name, request.user.email)
+                msg['To'] = my_sentto.email
 
-            html = create_html_string(first_name=my_userid.first_name, last_name=my_userid.last_name,
-                                      street=u_address.street, post_number=u_address.post_number,
-                                      post_name=u_address.post_name, email=my_userid.email, doc_name=clicked_doc,
-                                      output="html")
-            text = create_html_string(first_name=my_userid.first_name, last_name=my_userid.last_name,
-                                      street=u_address.street, post_number=u_address.post_number,
-                                      post_name=u_address.post_name, email=my_userid.email, doc_name=clicked_doc,
-                                      output="text")
+                html = create_html_string(first_name=my_userid.first_name, last_name=my_userid.last_name,
+                                          street=u_address.street, post_number=u_address.post_number,
+                                          post_name=u_address.post_name, email=my_userid.email, doc_name=clicked_doc,
+                                          output="html")
+                text = create_html_string(first_name=my_userid.first_name, last_name=my_userid.last_name,
+                                          street=u_address.street, post_number=u_address.post_number,
+                                          post_name=u_address.post_name, email=my_userid.email, doc_name=clicked_doc,
+                                          output="text")
 
-            part1 = MIMEText(text, 'plain')
-            part1.add_header('Content-Disposition', 'attachment', filename="zahteva_ijz_%s.txt" % clicked_doc)
-            part2 = MIMEText(html, 'html')
+                part1 = MIMEText(text, 'plain')
+                part1.add_header('Content-Disposition', 'attachment', filename="zahteva_ijz_%s.txt" % clicked_doc)
+                part2 = MIMEText(html, 'html')
 
-            # Attach parts into message container.
-            # According to RFC 2046, the last part of a multipart message, in this case
-            # the HTML message, is best and preferred. But HTML is prettier and 2016, FFS.
-            msg.attach(part2)
-            msg.attach(part1)
+                # Attach parts into message container.
+                # According to RFC 2046, the last part of a multipart message, in this case
+                # the HTML message, is best and preferred. But HTML is prettier and 2016, FFS.
+                msg.attach(part2)
+                msg.attach(part1)
 
-            raw = urlsafe_b64encode(msg.as_bytes())
-            raw = raw.decode()
-            msg = {'raw': raw}
+                raw = urlsafe_b64encode(msg.as_bytes())
+                raw = raw.decode()
+                msg = {'raw': raw}
 
-            service.users().messages().send(userId='me', body=msg).execute()
+                x = service.users().messages().send(userId='me', body=msg).execute()
 
-            # Update Docs table, add count + 1.
-            Docs.objects.filter(docname=clicked_doc).update(doccount=F('doccount') + 1)
-            # Save change to database.
-            my_act = Activity.objects.create(docid=my_docid, userid=my_userid, sentto=my_sentto,
-                                             datumtime=timezone.now())
-            my_act.save()
+                if x['labelIds'][0] == 'SENT':
+                    # Update Docs table, add count + 1.
+                    Docs.objects.filter(docname=clicked_doc).update(doccount=F('doccount') + 1)
+                    # Save change to database.
+                    my_act = Activity.objects.create(docid=my_docid, userid=my_userid, sentto=my_sentto,
+                                                     datumtime=timezone.now())
+                    my_act.save()
 
-            messages.success(request,
-                             "Zahtevek št. %s uspešno poslan. Organ ima 30 dni časa, da odgovori." % clicked_doc)
+                    messages.success(request,
+                                     "Zahtevek št. %s uspešno poslan. Organ ima 30 dni časa, da odgovori." % clicked_doc)
 
         except HTTPError as e:
             sending_error = 'Error: %s' % e
