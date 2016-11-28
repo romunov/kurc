@@ -159,11 +159,8 @@ def docs(request):
     # Find all documents from activity...
     u_docs_vals = u_docs.values('docid')
 
-    # ... and exclude them from Docs and fetch 10 random entries.
-    count = Docs.objects.all().count()
-    rand_entries = [randint(1, count) for _ in list(range(10))]
-
-    a_docs = Docs.objects.exclude(id__in=u_docs_vals).filter(id__in=rand_entries)
+    # Extract first ten documents
+    a_docs = Docs.objects.exclude(id__in=u_docs_vals)[:10]
 
     if request.method == "POST":
 
@@ -202,10 +199,6 @@ def docs(request):
                 return HttpResponseRedirect(authorize_url)
             else:
                 http = credential.authorize(httplib2.Http())
-
-                # # refresh token if expired
-                # if credential.access_token_expired:
-                #     credential.refresh(http)
 
                 service = discovery.build('gmail', 'v1', http=http)
 
