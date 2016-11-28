@@ -60,7 +60,7 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% if user and not user.is_anonymous %}
-                <li><a href="/navodila"><span class="glyphicon glyphicon-cog"></span> Navodila</a></li>
+                <li><a href="/navodila"><span class="glyphicon glyphicon-film"></span> Navodila</a></li>
                 {% endif %}               
                 {% if user and not user.is_anonymous %}
                 <li><a href="/settings"><span class="glyphicon glyphicon-cog"></span> Nastavitve</a></li>
@@ -87,8 +87,8 @@
 <!-- footer-->
 <footer class="footer">
     <div class="container">
-        <div class="col-lg-4 col-lg-offset-4">
-            <p class="text-center text-muted"><span class="glyphicon glyphicon-copyright-mark"></span> romunov</p>
+        <div class="col-md-4 col-md-offset-4">
+            <p class="text-center text-white"><span class="glyphicon glyphicon-copyright-mark"></span> romunov</p>
         </div>
     </div>
 </footer>
