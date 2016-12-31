@@ -20,7 +20,7 @@ from oauth2client import client
 from kurc.top_secrets import CLIENT_SECRET_FILE, SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPES, SOCIAL_AUTH_GOOGLE_OAUTH2_KEY
 from oauth2client.contrib import xsrfutil
 from mimetypes import MimeTypes
-from random import randint
+from oauth2client.client import HttpAccessTokenRefreshError
 
 flow = client.flow_from_clientsecrets(
     CLIENT_SECRET_FILE,
@@ -232,7 +232,15 @@ def docs(request):
                 raw = raw.decode()
                 msg = {'raw': raw}
 
-                x = service.users().messages().send(userId='me', body=msg).execute()
+                try:
+                    x = service.users().messages().send(userId='me', body=msg).execute()
+                except HttpAccessTokenRefreshError as e:
+                    messages.warning(request,
+                                     "Pri pošiljanju zadeve št. %s je prišlo do napake. Prosim ponovi." % clicked_doc)
+
+                    return render(request, 'frontend/dokumenti.html',
+                                  {'doc_list': a_docs, 'user_docs': u_docs, 'sending_error': sending_error,
+                                   'passto': passto})
 
                 if x['labelIds'][0] == 'SENT':
                     # Update Docs table, add count + 1.
@@ -243,7 +251,7 @@ def docs(request):
                     my_act.save()
 
                     messages.success(request,
-                                     "Zahtevek št. %s uspešno poslan. Organ ima 30 dni časa, da odgovori." % clicked_doc)
+                                     "Zahteva št. %s uspešno poslan. Organ ima 30 dni časa, da odgovori." % clicked_doc)
 
         except HTTPError as e:
             sending_error = 'Error: %s' % e
