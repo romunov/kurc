@@ -28,7 +28,6 @@ logger = logging.getLogger(__name__)
 
 @login_required
 def view_file(request, doc_id):
-
     doc = UploadedDocs.objects.get(id=doc_id)
 
     if not path.isfile(doc.docfile.path):
@@ -43,7 +42,6 @@ def view_file(request, doc_id):
 
 @login_required
 def upload_file(request):
-
     # https://amatellanes.wordpress.com/2013/11/05/dropzonejs-django-how-to-build-a-file-upload-form/
     if request.method == "POST":
         try:
@@ -75,7 +73,6 @@ def upload_file(request):
 
 
 def index(request):
-
     if request.user.is_anonymous():
         return render(request, template_name='frontend/login.html')
     else:
@@ -86,7 +83,6 @@ def index(request):
 
 
 def help(request):
-
     if request.user.is_anonymous():
         return render(request, template_name='frontend/404.html')
     else:
@@ -95,7 +91,6 @@ def help(request):
 
 @login_required
 def settings(request):
-
     # Prepare data to be filled into forms. User should always exist so no try/except call.
     prefill_user = User.objects.get(pk=request.user.id)
     prefill_customuser, pfcu_created = UserAddress.objects.get_or_create(id=User(id=request.user.id))
@@ -140,7 +135,6 @@ def login(request):
 
 @login_required
 def docs(request):
-
     passto = None
 
     # Invite first timers to add their information.
@@ -231,8 +225,34 @@ def docs(request):
 
                 try:
                     x = service.users().messages().send(userId='me', body=msg).execute()
+
+                    if x['labelIds'][0] == 'SENT':
+                        # Update Docs table, add count + 1.
+                        Docs.objects.filter(docname=clicked_doc).update(doccount=F('doccount') + 1)
+                        # Save change to database.
+                        my_act = Activity.objects.create(docid=my_docid, userid=my_userid, sentto=my_sentto,
+                                                         datumtime=timezone.now())
+                        my_act.save()
+
+                        messages.success(request,
+                                         "Zahteva št. %s uspešno poslan. Organ ima 30 dni časa, da odgovori." %
+                                         clicked_doc)
+
+                        return render(request, 'frontend/dokumenti.html',
+                                      {'doc_list': a_docs, 'user_docs': u_docs, 'sending_error': sending_error,
+                                       'passto': passto})
+
+                    else:
+                        messages.warning(request,
+                                         "Pri pošiljanju zadeve št. %s je prišlo do napake. Prosim ponovi." %
+                                         clicked_doc)
+
+                        return render(request, 'frontend/dokumenti.html',
+                                      {'doc_list': a_docs, 'user_docs': u_docs, 'sending_error': sending_error,
+                                       'passto': passto})
+
                 except HttpAccessTokenRefreshError as e:
-                    logger.error("HttpAccessTokenRefreshError detected.")
+                    logger.error(e)
                     messages.warning(request,
                                      "Pri pošiljanju zadeve št. %s je prišlo do napake. Prosim ponovi." % clicked_doc)
 
@@ -240,24 +260,13 @@ def docs(request):
                                   {'doc_list': a_docs, 'user_docs': u_docs, 'sending_error': sending_error,
                                    'passto': passto})
                 except Exception as e:
-                    logger.error("Unknown error occurred when sending e-mail.")
+                    logger.error(e)
                     messages.warning(request,
                                      "Pri pošiljanju zadeve št. %s je prišlo do napake. Prosim ponovi." % clicked_doc)
 
                     return render(request, 'frontend/dokumenti.html',
                                   {'doc_list': a_docs, 'user_docs': u_docs, 'sending_error': sending_error,
                                    'passto': passto})
-
-                if x['labelIds'][0] == 'SENT':
-                    # Update Docs table, add count + 1.
-                    Docs.objects.filter(docname=clicked_doc).update(doccount=F('doccount') + 1)
-                    # Save change to database.
-                    my_act = Activity.objects.create(docid=my_docid, userid=my_userid, sentto=my_sentto,
-                                                     datumtime=timezone.now())
-                    my_act.save()
-
-                    messages.success(request,
-                                     "Zahteva št. %s uspešno poslan. Organ ima 30 dni časa, da odgovori." % clicked_doc)
 
         except HTTPError as e:
             sending_error = 'Error: %s' % e
