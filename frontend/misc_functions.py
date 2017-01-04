@@ -1,6 +1,8 @@
 from __future__ import print_function
 import os
 from django.core.exceptions import ValidationError
+from oauth2client import client
+from kurc.top_secrets import CLIENT_SECRET_FILE, SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPES
 
 
 def create_html_string(first_name, last_name, street, post_number, post_name, email, doc_name, output):
@@ -116,3 +118,10 @@ def validate_file_extension(value):
 # http://python-social-auth.readthedocs.io/en/latest/use_cases.html#multiple-scopes-per-provider
 # class GmailOAuth2(GoogleOAuth2):
 #     name = 'gmail'
+
+
+flow = client.flow_from_clientsecrets(
+    CLIENT_SECRET_FILE,
+    scope=SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPES,
+    redirect_uri='https://kurc.biolitika.si/mailsendcallback/')
+    # redirect_uri='http://127.0.0.1:8000/mailsendcallback/')

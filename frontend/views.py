@@ -16,17 +16,11 @@ from .misc_functions import create_html_string
 from os import path
 from apiclient import discovery
 from oauth2client.contrib.django_orm import Storage
-from oauth2client import client
-from kurc.top_secrets import CLIENT_SECRET_FILE, SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPES, SOCIAL_AUTH_GOOGLE_OAUTH2_KEY
+from kurc.top_secrets import SOCIAL_AUTH_GOOGLE_OAUTH2_KEY
 from oauth2client.contrib import xsrfutil
 from mimetypes import MimeTypes
 from oauth2client.client import HttpAccessTokenRefreshError
-
-flow = client.flow_from_clientsecrets(
-    CLIENT_SECRET_FILE,
-    scope=SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPES,
-    redirect_uri='https://kurc.biolitika.si/mailsendcallback/')
-    # redirect_uri='http://127.0.0.1:8000/mailsendcallback/')
+from .misc_functions import flow
 
 
 @login_required
@@ -160,7 +154,7 @@ def docs(request):
     u_docs_vals = u_docs.values('docid')
 
     # Extract first ten documents
-    a_docs = Docs.objects.exclude(id__in=u_docs_vals).exclude(id__lte=3)[:10]
+    a_docs = Docs.objects.exclude(id__in=u_docs_vals).exclude(id__lte=3).order_by('?')[:10]
 
     if request.method == "POST":
 
