@@ -29,7 +29,6 @@
                         <tbody>
                         {% csrf_token %}
                         {% for doc in doc_list %}
-                        {% if doc.doccount < 3 %}
                         <tr>
                             <td>{{ doc.docname }}</td>
                             <td>
@@ -39,7 +38,6 @@
                                 </button>
                             </td>
                         </tr>
-                        {% endif %}
                         {% endfor %}
                         </tbody>
                     </table>

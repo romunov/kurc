@@ -160,7 +160,7 @@ def docs(request):
     u_docs_vals = u_docs.values('docid')
 
     # Extract first ten documents
-    a_docs = Docs.objects.exclude(id__in=u_docs_vals)[:10]
+    a_docs = Docs.objects.exclude(id__in=u_docs_vals).exclude(id__lte=3)[:10]
 
     if request.method == "POST":
 
