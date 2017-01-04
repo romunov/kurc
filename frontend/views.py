@@ -21,6 +21,9 @@ from oauth2client.contrib import xsrfutil
 from mimetypes import MimeTypes
 from oauth2client.client import HttpAccessTokenRefreshError
 from .misc_functions import flow
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 @login_required
@@ -153,7 +156,7 @@ def docs(request):
     # Find all documents from activity...
     u_docs_vals = u_docs.values('docid')
 
-    # Extract first ten documents
+    # Extract first ten documents but first exclude already requested and docs with count >= 3
     a_docs = Docs.objects.exclude(id__in=u_docs_vals).exclude(id__lte=3).order_by('?')[:10]
 
     if request.method == "POST":
@@ -229,6 +232,15 @@ def docs(request):
                 try:
                     x = service.users().messages().send(userId='me', body=msg).execute()
                 except HttpAccessTokenRefreshError as e:
+                    logger.error("HttpAccessTokenRefreshError detected.")
+                    messages.warning(request,
+                                     "Pri pošiljanju zadeve št. %s je prišlo do napake. Prosim ponovi." % clicked_doc)
+
+                    return render(request, 'frontend/dokumenti.html',
+                                  {'doc_list': a_docs, 'user_docs': u_docs, 'sending_error': sending_error,
+                                   'passto': passto})
+                except Exception as e:
+                    logger.error("Unknown error occurred when sending e-mail.")
                     messages.warning(request,
                                      "Pri pošiljanju zadeve št. %s je prišlo do napake. Prosim ponovi." % clicked_doc)
 
