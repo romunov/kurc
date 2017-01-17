@@ -17,9 +17,10 @@
             {% endfor %}
             {% endif %}
             <p>V kolikor vam je organ odgovoril pozitivno in ste prejeli dokument, ga prosim posredujte preko te spletne
-                strani. Priporočamo, da datoteko poimenujete po št. zadeve, npr. <code>090-2016/01.pdf</code> nato pa
-                pritisnite <code>Pošlji dokument.</code> Možno je uporabiti "vleci & spusti" (drag&drop) funkcijo in
-                datoteke spustiti v spodnji okvir.
+                strani. Priporočamo, da datoteko poimenujete po št. zadeve, npr. <code>090-2016/01.pdf</code>. Ime naj bo
+                čim krajše. Dokument lahko tudi z miško odložite (drag&drop) v okvirček. Dokument bo viden ko boste naslednjič
+                osvežili stran (pritisnete F5 ali na povezavo <a href="/upload"><span class="glyphicon glyphicon-saved"></span>
+                Prejeti dokumenti</a>.
             </p>
             <form id="uploadform" class="dropzone" action="{% url 'upload_file' %}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
