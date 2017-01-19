@@ -150,8 +150,8 @@ def docs(request):
     # Find all documents from activity...
     u_docs_vals = u_docs.values('docid')
 
-    # Extract first ten documents but first exclude already requested and docs with count >= 3
-    a_docs = Docs.objects.exclude(id__in=u_docs_vals).exclude(id__lte=3).order_by('?')[:10]
+    # Extract first ten documents but first exclude already requested, non-active and docs with count >= 3
+    a_docs = Docs.objects.exclude(id__in=u_docs_vals).exclude(id__lte=3).exclude(active=False).order_by('?')[:10]
 
     if request.method == "POST":
 
