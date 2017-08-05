@@ -1,0 +1,29 @@
+How to migrate from Postgreqsl to MySQL.
+
+First create a dump of the database.
+I do this in two steps because some tables cause a ruckus.
+
+    python manage.py dumpdata frontend --exclude auth.permission --exclude contenttypes > baza_brez_perm_ct.json
+    python manage.py dumpdata auth.user > baza_user.json
+
+Then change DATABASES to
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'db_name',
+            'USER': 'db_user',
+            'PASSWORD': 'xxx',
+            'HOST': 'localhost',
+            'PORT': '3306'
+        }
+    }
+
+Perform migration
+
+    python manage.py migrate
+
+You can now load the data.
+
+    python manage.py loaddata baza_user.json
+    python manage.py loaddata baza_brez_perm_ct.json
