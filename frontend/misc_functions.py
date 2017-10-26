@@ -35,7 +35,7 @@ def create_html_string(first_name, last_name, street, post_number, post_name, em
                 <td align="left" style="padding: 20px 5px 10px 5px;">
                     Ministrstvo za notranje zadeve
                     <br> Inšpektorat RS za notranje zadeve
-                    <br> Štefanova 11
+                    <br> Štefanova 2
                     <br> 1000 Ljubljana
                     <br> mnz@gov.si
                 </td>
